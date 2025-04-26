@@ -30,33 +30,33 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.btnServertoggle = new System.Windows.Forms.Button();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkAutostart = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.chkAllowremoteAccess = new System.Windows.Forms.CheckBox();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.btnServertoggle = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnAddNewList = new System.Windows.Forms.Button();
+            this.lbLists = new System.Windows.Forms.ListBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnAddToList = new System.Windows.Forms.Button();
+            this.lbElementsInList = new System.Windows.Forms.ListBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnStartOnBoot = new System.Windows.Forms.Button();
+            this.pbPreview = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btnServertoggle
-            // 
-            this.btnServertoggle.Location = new System.Drawing.Point(155, 67);
-            this.btnServertoggle.Name = "btnServertoggle";
-            this.btnServertoggle.Size = new System.Drawing.Size(125, 52);
-            this.btnServertoggle.TabIndex = 0;
-            this.btnServertoggle.Text = "Start Server";
-            this.btnServertoggle.UseVisualStyleBackColor = true;
-            this.btnServertoggle.Click += new System.EventHandler(this.btnServertoggle_Click);
-            // 
-            // txtLog
-            // 
-            this.txtLog.Location = new System.Drawing.Point(791, 595);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(765, 279);
-            this.txtLog.TabIndex = 1;
             // 
             // notifyIcon1
             // 
@@ -70,43 +70,262 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 986);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1174);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1622, 32);
+            this.statusStrip1.Size = new System.Drawing.Size(2301, 32);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(179, 25);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(159, 25);
+            this.toolStripStatusLabel1.Text = "Server not running";
+            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnStartOnBoot);
+            this.groupBox1.Controls.Add(this.chkAutostart);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.chkAllowremoteAccess);
+            this.groupBox1.Controls.Add(this.txtPort);
+            this.groupBox1.Controls.Add(this.btnServertoggle);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(2277, 89);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Settings";
+            // 
+            // chkAutostart
+            // 
+            this.chkAutostart.AutoSize = true;
+            this.chkAutostart.Location = new System.Drawing.Point(383, 40);
+            this.chkAutostart.Name = "chkAutostart";
+            this.chkAutostart.Size = new System.Drawing.Size(357, 24);
+            this.chkAutostart.TabIndex = 5;
+            this.chkAutostart.Text = "Autostart server (Will minimize to tray on start)";
+            this.chkAutostart.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(219, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 20);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Port:";
+            // 
+            // chkAllowremoteAccess
+            // 
+            this.chkAllowremoteAccess.AutoSize = true;
+            this.chkAllowremoteAccess.Location = new System.Drawing.Point(20, 40);
+            this.chkAllowremoteAccess.Name = "chkAllowremoteAccess";
+            this.chkAllowremoteAccess.Size = new System.Drawing.Size(176, 24);
+            this.chkAllowremoteAccess.TabIndex = 3;
+            this.chkAllowremoteAccess.Text = "Allow remoteaccess";
+            this.chkAllowremoteAccess.UseVisualStyleBackColor = true;
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(267, 37);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(100, 26);
+            this.txtPort.TabIndex = 2;
+            // 
+            // btnServertoggle
+            // 
+            this.btnServertoggle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnServertoggle.Location = new System.Drawing.Point(2139, 25);
+            this.btnServertoggle.Name = "btnServertoggle";
+            this.btnServertoggle.Size = new System.Drawing.Size(125, 52);
+            this.btnServertoggle.TabIndex = 1;
+            this.btnServertoggle.Text = "Start Server";
+            this.btnServertoggle.UseVisualStyleBackColor = true;
+            this.btnServertoggle.Click += new System.EventHandler(this.btnServertoggle_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.lbLists);
+            this.groupBox2.Controls.Add(this.btnAddNewList);
+            this.groupBox2.Location = new System.Drawing.Point(12, 107);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(592, 1049);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Lists";
+            // 
+            // btnAddNewList
+            // 
+            this.btnAddNewList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddNewList.Location = new System.Drawing.Point(451, 1007);
+            this.btnAddNewList.Name = "btnAddNewList";
+            this.btnAddNewList.Size = new System.Drawing.Size(124, 36);
+            this.btnAddNewList.TabIndex = 0;
+            this.btnAddNewList.Text = "Add new list";
+            this.btnAddNewList.UseVisualStyleBackColor = true;
+            this.btnAddNewList.Click += new System.EventHandler(this.btnAddNewList_Click);
+            // 
+            // lbLists
+            // 
+            this.lbLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLists.FormattingEnabled = true;
+            this.lbLists.ItemHeight = 20;
+            this.lbLists.Location = new System.Drawing.Point(20, 25);
+            this.lbLists.Name = "lbLists";
+            this.lbLists.Size = new System.Drawing.Size(554, 964);
+            this.lbLists.TabIndex = 1;
+            this.lbLists.SelectedIndexChanged += new System.EventHandler(this.lbLists_SelectedIndexChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox3.Controls.Add(this.lbElementsInList);
+            this.groupBox3.Controls.Add(this.btnAddToList);
+            this.groupBox3.Location = new System.Drawing.Point(610, 107);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(529, 1049);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Elements in list";
+            // 
+            // btnAddToList
+            // 
+            this.btnAddToList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddToList.Location = new System.Drawing.Point(448, 1014);
+            this.btnAddToList.Name = "btnAddToList";
+            this.btnAddToList.Size = new System.Drawing.Size(75, 29);
+            this.btnAddToList.TabIndex = 0;
+            this.btnAddToList.Text = "Add";
+            this.btnAddToList.UseVisualStyleBackColor = true;
+            this.btnAddToList.Click += new System.EventHandler(this.btnAddToList_Click);
+            // 
+            // lbElementsInList
+            // 
+            this.lbElementsInList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbElementsInList.FormattingEnabled = true;
+            this.lbElementsInList.ItemHeight = 20;
+            this.lbElementsInList.Location = new System.Drawing.Point(6, 25);
+            this.lbElementsInList.Name = "lbElementsInList";
+            this.lbElementsInList.Size = new System.Drawing.Size(517, 964);
+            this.lbElementsInList.TabIndex = 1;
+            this.lbElementsInList.SelectedIndexChanged += new System.EventHandler(this.lbElementsInList_SelectedIndexChanged);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.pbPreview);
+            this.groupBox4.Controls.Add(this.txtLog);
+            this.groupBox4.Location = new System.Drawing.Point(1145, 107);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(1143, 1049);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Log output";
+            // 
+            // txtLog
+            // 
+            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog.Location = new System.Drawing.Point(6, 25);
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtLog.Size = new System.Drawing.Size(1125, 543);
+            this.txtLog.TabIndex = 2;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // btnStartOnBoot
+            // 
+            this.btnStartOnBoot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStartOnBoot.Location = new System.Drawing.Point(1929, 24);
+            this.btnStartOnBoot.Name = "btnStartOnBoot";
+            this.btnStartOnBoot.Size = new System.Drawing.Size(204, 52);
+            this.btnStartOnBoot.TabIndex = 6;
+            this.btnStartOnBoot.Text = "button1";
+            this.btnStartOnBoot.UseVisualStyleBackColor = true;
+            this.btnStartOnBoot.Click += new System.EventHandler(this.btnStartOnBoot_Click);
+            // 
+            // pbPreview
+            // 
+            this.pbPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbPreview.Location = new System.Drawing.Point(6, 574);
+            this.pbPreview.Name = "pbPreview";
+            this.pbPreview.Size = new System.Drawing.Size(1125, 469);
+            this.pbPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbPreview.TabIndex = 3;
+            this.pbPreview.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1622, 1018);
+            this.ClientSize = new System.Drawing.Size(2301, 1206);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.btnServertoggle);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Simple image server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnServertoggle;
-        private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkAllowremoteAccess;
+        private System.Windows.Forms.TextBox txtPort;
+        private System.Windows.Forms.Button btnServertoggle;
+        private System.Windows.Forms.CheckBox chkAutostart;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ListBox lbLists;
+        private System.Windows.Forms.Button btnAddNewList;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnAddToList;
+        private System.Windows.Forms.ListBox lbElementsInList;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button btnStartOnBoot;
+        private System.Windows.Forms.PictureBox pbPreview;
     }
 }
 
