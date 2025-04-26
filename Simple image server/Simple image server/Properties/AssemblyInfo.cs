@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Simple image server")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("FONMU-")]
+[assembly: AssemblyCompany("Salainne")]
 [assembly: AssemblyProduct("Simple image server")]
-[assembly: AssemblyCopyright("Copyright © FONMU- 2025")]
+[assembly: AssemblyCopyright("Copyright © Salainne 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

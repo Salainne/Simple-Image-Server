@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Simple_image_server
 {
@@ -26,7 +27,7 @@ namespace Simple_image_server
             Error
         }
 
-        private string _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings.json");
+        private string _settingsPath;
 
         private Thread serverThread;
         private HttpListener httpListener;
@@ -42,12 +43,29 @@ namespace Simple_image_server
 
         public Form1()
         {
-            InitializeComponent();            
+            _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings.json");
+#if DEBUG
+            _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings-DEBUG.json");
+#endif
+
+            InitializeComponent();
+            lbLists.DrawMode = DrawMode.OwnerDrawFixed;
+            lbLists.DrawItem += LbLists_DrawItem;
+
+            ListsettingsGroupSetEnabled(false);
 
             btnServertoggle.Text = "Start Server";
             toolStripStatusLabel1.Text = $"Server not running";
 
             SetAutostartText();
+        }
+
+        private void ListsettingsGroupSetEnabled(bool enabled)
+        {
+            foreach(Control c in grpListsettings.Controls)
+            {
+                c.Enabled = enabled;
+            }
         }
 
         private void SetAutostartText()
@@ -319,7 +337,7 @@ namespace Simple_image_server
                 client.LastServedImageList = filePath;
             }
 
-            var list = _settings.Lists.FirstOrDefault(a => string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase));
+            var list = GetFirstActivelistWithName(filePath);
             if(list == null)
             {
                 statuscode = 404;
@@ -327,10 +345,18 @@ namespace Simple_image_server
                 return null;
             }
 
-            if(client.LastServedImageId >= list.Images.Count)
+            if (list.Images.Count == 0)
+            {
+                statuscode = 200;
+                statusmessage = "List empty";
+                return null;
+            }
+
+            if (client.LastServedImageId >= list.Images.Count)
             {
                 client.LastServedImageId = 0;
             }
+
             var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
 
             if (cropToSquare)
@@ -347,6 +373,20 @@ namespace Simple_image_server
             statuscode = 200;
             statusmessage = "OK";
             return bytes;
+        }
+
+        private Imagelist GetFirstActivelistWithName(string filePath)
+        {
+            //var list = _settings.Lists.FirstOrDefault(a => string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase));
+            var lists = _settings.Lists.Where(
+                a => 
+                string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase) && 
+                a.IsActive && 
+                a.ActiveDays.HasFlag((OpenDays)(1 << (int)DateTime.Now.DayOfWeek)) &&
+                a.IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute)
+                ).ToList();
+
+            return lists.FirstOrDefault();
         }
 
         public static byte[] CropToSquare(byte[] imageBytes)
@@ -430,7 +470,6 @@ namespace Simple_image_server
                 {
                     Id = Guid.NewGuid(),
                     Name = listname,
-                    Images = new List<Model.ImageElement>()
                 };
                 _settings.Lists.Add(list);
             }
@@ -461,12 +500,15 @@ namespace Simple_image_server
                 return;
             }
 
+            ListsettingsGroupSetEnabled(true);
+
             var theElement = ((Simple_image_server.Model.ListboxItemWrapper)((ListBox)sender).SelectedItem).Tag;
 
             lbElementsInList.Items.Clear();
             if (theElement != null)
             {
                 var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Model.Imagelist)theElement).Id);
+                LoadListsettings(list);
                 foreach (var image in list.Images)
                 {
                     var item = new Model.ListboxItemWrapper
@@ -477,6 +519,102 @@ namespace Simple_image_server
                     lbElementsInList.Items.Add(item);
                 }
             }
+        }
+
+        private void LoadListsettings(Imagelist item)
+        {
+            foreach(Control c in grpListsettings.Controls)
+            {
+                if (c.GetType() == typeof(System.Windows.Forms.Label))
+                {
+                    continue;
+                }
+
+                if (c.GetType() == typeof(System.Windows.Forms.CheckBox))
+                {
+                    ((System.Windows.Forms.CheckBox)c).CheckedChanged -= new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+                if (c.GetType() == typeof(System.Windows.Forms.TextBox))
+                {
+                    ((System.Windows.Forms.TextBox)c).TextChanged -= new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+                if (c.GetType() == typeof(System.Windows.Forms.NumericUpDown))
+                {
+                    ((System.Windows.Forms.NumericUpDown)c).ValueChanged -= new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+            }
+
+            chkListActive.Checked = item.IsActive;
+            txtListname.Text = item.Name;
+            chkListMonday.Checked = item.ActiveDays.HasFlag(OpenDays.Monday);
+            chkListTuesday.Checked = item.ActiveDays.HasFlag(OpenDays.Tuesday);
+            chkListWednesday.Checked = item.ActiveDays.HasFlag(OpenDays.Wednesday);
+            chkListThursday.Checked = item.ActiveDays.HasFlag(OpenDays.Thursday);
+            chkListFriday.Checked = item.ActiveDays.HasFlag(OpenDays.Friday);
+            chkListSaturday.Checked = item.ActiveDays.HasFlag(OpenDays.Saturday);
+            chkListSunday.Checked = item.ActiveDays.HasFlag(OpenDays.Sunday);
+            numFromHour.Value = item.GetStartTime().Hours;
+            numFromMinute.Value = item.GetStartTime().Minutes;
+            numToHour.Value = item.GetEndTime().Hours;
+            numToMinute.Value = item.GetEndTime().Minutes;
+
+
+            foreach (Control c in grpListsettings.Controls)
+            {
+                if (c.GetType() == typeof(System.Windows.Forms.Label))
+                {
+                    continue;
+                }
+
+                if (c.GetType() == typeof(System.Windows.Forms.CheckBox))
+                {
+                    ((System.Windows.Forms.CheckBox)c).CheckedChanged += new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+                if (c.GetType() == typeof(System.Windows.Forms.TextBox))
+                {
+                    ((System.Windows.Forms.TextBox)c).TextChanged += new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+                if (c.GetType() == typeof(System.Windows.Forms.NumericUpDown))
+                {
+                    ((System.Windows.Forms.NumericUpDown)c).ValueChanged += new System.EventHandler(this.SetListsettings);
+                    continue;
+                }
+            }
+        }
+
+        private void SetListsettings(object sender, EventArgs e)
+        {
+            if ((ListboxItemWrapper)lbLists.SelectedItem == null)
+            {
+                return;
+            }
+            var theElement = ((ListboxItemWrapper)(lbLists).SelectedItem).Tag;
+            var item = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)theElement).Id);
+
+            item.IsActive = chkListActive.Checked;
+            item.Name = txtListname.Text;
+
+            item.ActiveDays = OpenDays.None;
+            if (chkListMonday.Checked) { item.ActiveDays |= OpenDays.Monday; }
+            if (chkListTuesday.Checked) { item.ActiveDays |= OpenDays.Tuesday; }
+            if (chkListWednesday.Checked) { item.ActiveDays |= OpenDays.Wednesday; }
+            if (chkListThursday.Checked) { item.ActiveDays |= OpenDays.Thursday; }
+            if (chkListFriday.Checked) { item.ActiveDays |= OpenDays.Friday; }
+            if (chkListSaturday.Checked) { item.ActiveDays |= OpenDays.Saturday; }
+            if (chkListSunday.Checked) { item.ActiveDays |= OpenDays.Sunday; }
+            item.SetStarttime((int)numFromHour.Value, (int)numFromMinute.Value);
+            item.SetEndtime((int)numToHour.Value, (int)numToMinute.Value);
+
+            ((ListboxItemWrapper)lbLists.SelectedItem).Name = item.Name;
+            // weird hack to update the listbox item..
+            int index = lbLists.SelectedIndex;
+            lbLists.Items[index] = lbLists.Items[index];
+            lbLists.Invalidate();
         }
 
         private void btnAddToList_Click(object sender, EventArgs e)
@@ -553,6 +691,30 @@ namespace Simple_image_server
             }
 
             _darkMode.ApplyTheme(_settings.DarkMode);
+        }
+
+        private void LbLists_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+            {
+                return;
+            }
+            var item = (ListboxItemWrapper)lbLists.Items[e.Index];
+            Color foreColor = this.ForeColor;
+            if (((Imagelist)item.Tag).IsActive == false)
+            {
+                foreColor = Color.Yellow;
+            }
+            e.DrawBackground();
+            TextRenderer.DrawText(
+                e.Graphics,
+                item.Name,
+                lbLists.Font,
+                e.Bounds,
+                foreColor,
+                TextFormatFlags.Left
+            );
+            e.DrawFocusRectangle();
         }
     }
 }
