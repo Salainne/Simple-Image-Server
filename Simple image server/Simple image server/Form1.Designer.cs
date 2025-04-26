@@ -69,6 +69,7 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnSaveSettingsNow = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -112,6 +113,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnSaveSettingsNow);
             this.groupBox1.Controls.Add(this.DarkMode);
             this.groupBox1.Controls.Add(this.btnStartOnBoot);
             this.groupBox1.Controls.Add(this.chkAutostart);
@@ -522,6 +524,16 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // btnSaveSettingsNow
+            // 
+            this.btnSaveSettingsNow.Location = new System.Drawing.Point(1763, 25);
+            this.btnSaveSettingsNow.Name = "btnSaveSettingsNow";
+            this.btnSaveSettingsNow.Size = new System.Drawing.Size(160, 52);
+            this.btnSaveSettingsNow.TabIndex = 8;
+            this.btnSaveSettingsNow.Text = "Save settings now";
+            this.btnSaveSettingsNow.UseVisualStyleBackColor = true;
+            this.btnSaveSettingsNow.Click += new System.EventHandler(this.btnSaveSettingsNow_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -598,6 +610,7 @@
         private System.Windows.Forms.NumericUpDown numToHour;
         private System.Windows.Forms.TextBox txtListname;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnSaveSettingsNow;
     }
 }
 

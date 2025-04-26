@@ -270,15 +270,31 @@ namespace Simple_image_server
                     var clientid = request.QueryString["clientid"] ?? "anyclient";
                     var cropToSquare = request.QueryString["croptosquare"] == "1";
                     var width = request.QueryString["width"] != null ? int.Parse(request.QueryString["width"]) : 0;
+                    var format = request.QueryString["format"] != null ? request.QueryString["format"] : "image";
 
-                    var resultBytes = GetReponse(clientid, cropToSquare, width, filePath, out var statuscode, out var statusmessage);
-                    response.StatusCode = statuscode;
+                    //response.ContentType = "image/jpeg";
+                    response.ContentType = "image/png";
+
+                    byte[] resultBytes = null;
+                    string statusmessage = string.Empty;
+                    int statuscode = 200;
+
+                    if (format == "json")
+                    {
+                        resultBytes = GetJsonResponse(clientid, cropToSquare, width, request.Url);
+                        //response.ContentType = "application/json";
+                        response.ContentType = "text/plain";
+                        response.StatusCode = statuscode;
+                    }
+                    else
+                    {
+                        resultBytes = GetReponse(clientid, cropToSquare, width, filePath, out statuscode, out statusmessage);
+                        response.StatusCode = statuscode;
+                    }
 
                     Invoke(new Action(() => Log($"GET: {filePath}. Client: {clientid} Width: {width}, crop: {cropToSquare}, Statuscode: {statuscode}", LogLevel.Info)));
-
                     if (resultBytes != null)
                     {
-                        response.ContentType = "image/jpeg";
                         response.ContentLength64 = resultBytes.Length;
                         using(var outputStream = response.OutputStream)
                         {
@@ -308,6 +324,28 @@ namespace Simple_image_server
             {
                 Invoke(new Action(() => Log($"Error handling request: {ex.Message}", LogLevel.Error)));
             }
+        }
+
+        private byte[] GetJsonResponse(
+            string clientid,
+            bool cropToSquare,
+            int width,
+            Uri uri
+            )
+        {
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            query.Remove("format");
+            var builder = new UriBuilder(uri)
+            {
+                Query = query.ToString()
+            };
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(new
+            {
+                backgroundImageUrl = builder.Uri
+            }, Newtonsoft.Json.Formatting.Indented);
+            
+            return Encoding.UTF8.GetBytes(json);
         }
 
         private byte[] GetReponse(
@@ -715,6 +753,11 @@ namespace Simple_image_server
                 TextFormatFlags.Left
             );
             e.DrawFocusRectangle();
+        }
+
+        private void btnSaveSettingsNow_Click(object sender, EventArgs e)
+        {
+            SaveSettings();
         }
     }
 }
