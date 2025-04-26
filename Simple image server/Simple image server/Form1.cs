@@ -292,7 +292,7 @@ namespace Simple_image_server
                         response.StatusCode = statuscode;
                     }
 
-                    Invoke(new Action(() => Log($"GET: {filePath}. Client: {clientid} Width: {width}, crop: {cropToSquare}, Statuscode: {statuscode}", LogLevel.Info)));
+                    Invoke(new Action(() => Log($"GET: {filePath} {statusmessage}. Client: {clientid} Width: {width}, crop: {cropToSquare}, Statuscode: {statuscode}", LogLevel.Info)));
                     if (resultBytes != null)
                     {
                         response.ContentLength64 = resultBytes.Length;
@@ -365,9 +365,10 @@ namespace Simple_image_server
                     LastServedImageList = filePath
                 });
             }
-
+            
             var client = _clientIds[clientid];
             client.LastRequest = DateTime.Now;
+
             // if requested list is not the same as the last one, reset the last served image
             if (client.LastServedImageList != filePath)
             {
@@ -407,9 +408,14 @@ namespace Simple_image_server
                 bytes = ResizeImage(bytes, width);
             }
 
-            client.LastServedImageId++;
+            if(client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
+            {
+                client.LastNewImagetime = DateTime.Now;
+                client.LastServedImageId++;
+            }
+            
             statuscode = 200;
-            statusmessage = "OK";
+            statusmessage = $"OK Imageid {client.LastServedImageId}";
             return bytes;
         }
 
@@ -598,6 +604,7 @@ namespace Simple_image_server
             numFromMinute.Value = item.GetStartTime().Minutes;
             numToHour.Value = item.GetEndTime().Hours;
             numToMinute.Value = item.GetEndTime().Minutes;
+            numInterval.Value = item.Interval;
 
 
             foreach (Control c in grpListsettings.Controls)
@@ -647,6 +654,7 @@ namespace Simple_image_server
             if (chkListSunday.Checked) { item.ActiveDays |= OpenDays.Sunday; }
             item.SetStarttime((int)numFromHour.Value, (int)numFromMinute.Value);
             item.SetEndtime((int)numToHour.Value, (int)numToMinute.Value);
+            item.Interval = (int)numInterval.Value;
 
             ((ListboxItemWrapper)lbLists.SelectedItem).Name = item.Name;
             // weird hack to update the listbox item..

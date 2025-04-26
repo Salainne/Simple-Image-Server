@@ -17,6 +17,7 @@ namespace Simple_image_server.Model
         public OpenDays ActiveDays { get; set; }
         public int Starttime { get; set; }
         public int Endtime { get; set; }
+        public int Interval { get; set; }
 
         public void SetStarttime(int hours, int minutes)
         {
@@ -50,7 +51,7 @@ namespace Simple_image_server.Model
             ActiveDays = OpenDays.Monday | OpenDays.Tuesday | OpenDays.Wednesday | OpenDays.Thursday | OpenDays.Friday | OpenDays.Saturday | OpenDays.Sunday;
             Images = new List<ImageElement>();
             Id = Guid.NewGuid();
-
+            Interval = 5;
             SetEndtime(23, 59);
         }
     }

@@ -70,6 +70,8 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnSaveSettingsNow = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numInterval = new System.Windows.Forms.NumericUpDown();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -81,6 +83,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -216,6 +219,8 @@
             // 
             this.grpListsettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpListsettings.Controls.Add(this.numInterval);
+            this.grpListsettings.Controls.Add(this.label6);
             this.grpListsettings.Controls.Add(this.txtListname);
             this.grpListsettings.Controls.Add(this.label5);
             this.grpListsettings.Controls.Add(this.label4);
@@ -233,9 +238,9 @@
             this.grpListsettings.Controls.Add(this.chkListSunday);
             this.grpListsettings.Controls.Add(this.chkListMonday);
             this.grpListsettings.Controls.Add(this.chkListActive);
-            this.grpListsettings.Location = new System.Drawing.Point(20, 945);
+            this.grpListsettings.Location = new System.Drawing.Point(20, 842);
             this.grpListsettings.Name = "grpListsettings";
-            this.grpListsettings.Size = new System.Drawing.Size(554, 285);
+            this.grpListsettings.Size = new System.Drawing.Size(554, 388);
             this.grpListsettings.TabIndex = 2;
             this.grpListsettings.TabStop = false;
             this.grpListsettings.Text = "List settings";
@@ -430,7 +435,7 @@
             this.lbLists.ItemHeight = 20;
             this.lbLists.Location = new System.Drawing.Point(20, 25);
             this.lbLists.Name = "lbLists";
-            this.lbLists.Size = new System.Drawing.Size(554, 904);
+            this.lbLists.Size = new System.Drawing.Size(554, 764);
             this.lbLists.TabIndex = 1;
             this.lbLists.SelectedIndexChanged += new System.EventHandler(this.lbLists_SelectedIndexChanged);
             // 
@@ -534,6 +539,37 @@
             this.btnSaveSettingsNow.UseVisualStyleBackColor = true;
             this.btnSaveSettingsNow.Click += new System.EventHandler(this.btnSaveSettingsNow_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 270);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(340, 20);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Interval (seconds each list shows same image):";
+            // 
+            // numInterval
+            // 
+            this.numInterval.Location = new System.Drawing.Point(11, 293);
+            this.numInterval.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.numInterval.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numInterval.Name = "numInterval";
+            this.numInterval.Size = new System.Drawing.Size(94, 26);
+            this.numInterval.TabIndex = 20;
+            this.numInterval.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -565,6 +601,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -611,6 +648,8 @@
         private System.Windows.Forms.TextBox txtListname;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnSaveSettingsNow;
+        private System.Windows.Forms.NumericUpDown numInterval;
+        private System.Windows.Forms.Label label6;
     }
 }
 

@@ -10,8 +10,14 @@ namespace Simple_image_server.Model
     {
         public string Id { get; set; }
         public DateTime LastRequest { get; set; }
+        public DateTime LastNewImagetime { get; set; }
 
         public int LastServedImageId { get; set; }
         public string LastServedImageList { get; set; }
+
+        public Client()
+        {
+            LastNewImagetime = DateTime.Now;
+        }
     }
 }
