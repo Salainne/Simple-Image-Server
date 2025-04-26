@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Simple_image_server.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,10 +37,12 @@ namespace Simple_image_server
         private string _appName = "SimpleImageServer";
 
         private Dictionary<string, Model.Client> _clientIds = new Dictionary<string, Model.Client>();
+        
+        private DarkModeTheme _darkMode = null;
 
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
 
             btnServertoggle.Text = "Start Server";
             toolStripStatusLabel1.Text = $"Server not running";
@@ -122,10 +125,16 @@ namespace Simple_image_server
             // Get our settings...
             LoadSettings();
 
+            _darkMode = new DarkModeTheme(this)
+            {
+                ColorMode = _settings.DarkMode ? DarkModeTheme.DisplayMode.DarkMode : DarkModeTheme.DisplayMode.ClearMode
+            };
+            _darkMode.ApplyTheme(_settings.DarkMode);
+            DarkMode.Checked = _settings.DarkMode;
+
             chkAllowremoteAccess.Checked = _settings.AllowRemoteAccess;
             txtPort.Text = _settings.Port.ToString();
-            chkAutostart.Checked = _settings.Autostart;
-
+            chkAutostart.Checked = _settings.Autostart;            
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -157,7 +166,8 @@ namespace Simple_image_server
             _settings = new Model.Settings
             {
                 AllowRemoteAccess = false,
-                Port = 9191
+                Port = 9191,
+                DarkMode = true
             };
         }
 
@@ -166,6 +176,7 @@ namespace Simple_image_server
             _settings.AllowRemoteAccess = chkAllowremoteAccess.Checked;
             _settings.Port = int.TryParse(txtPort.Text, out int port) ? port : 9191;
             _settings.Autostart = chkAutostart.Checked;
+            _settings.DarkMode = DarkMode.Checked;
 
             if (!Directory.Exists(Path.GetDirectoryName(_settingsPath)))
             {
@@ -520,6 +531,28 @@ namespace Simple_image_server
             }
 
             pbPreview.ImageLocation = ((Simple_image_server.Model.ListboxItemWrapper)((ListBox)sender).SelectedItem).Name;
+        }
+
+        private void DarkMode_CheckedChanged(object sender, EventArgs e)
+        {
+            _settings.DarkMode = DarkMode.Checked;
+
+            if (_settings.DarkMode)
+            {
+                _darkMode = new DarkModeTheme(this)
+                {
+                    ColorMode = DarkModeTheme.DisplayMode.DarkMode
+                };
+            }
+            else
+            {
+                _darkMode = new DarkModeTheme(this)
+                {
+                    ColorMode = DarkModeTheme.DisplayMode.ClearMode
+                };
+            }
+
+            _darkMode.ApplyTheme(_settings.DarkMode);
         }
     }
 }

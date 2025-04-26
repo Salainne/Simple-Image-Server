@@ -8,6 +8,7 @@ namespace Simple_image_server.Model
 {
     internal class Settings
     {
+        public bool DarkMode { get; set; }
         public int SettingsVersion { get { return 1; } }
         public bool AllowRemoteAccess { get; set; }
         public int Port { get; set; }
