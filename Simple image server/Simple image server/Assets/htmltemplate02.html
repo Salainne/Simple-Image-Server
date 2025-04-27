@@ -30,7 +30,8 @@
 
         function loadNewImage() {
             const timestamp = new Date().getTime();
-            imgElement.src = imagePath + '?t=' + timestamp;
+            const separator = imagePath.includes('?') ? '&' : '?';
+            imgElement.src = imagePath + separator + 't=' + timestamp;
         }
         loadNewImage();
         setInterval(loadNewImage, [INTERVAL]);

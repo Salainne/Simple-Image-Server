@@ -52,7 +52,8 @@
 
         function loadNewImage() {
             const timestamp = new Date().getTime();
-            next.src = imagePath + '?t=' + timestamp;
+            const separator = imagePath.includes('?') ? '&' : '?';
+            next.src = imagePath + separator + 't=' + timestamp;
 
             next.onload = () => {
                 next.classList.add('active');
