@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,12 @@ namespace Simple_image_server.Model
         public bool Autostart { get; set; }
 
         public List<Model.Imagelist> Lists { get; set; }
+        public string CultureInfoName { get; set; }
 
         public Settings()
         {
             Lists = new List<Model.Imagelist>();
+            CultureInfoName = "en-US";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Simple_image_server.Model;
+using Simple_image_server.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -54,19 +56,35 @@ namespace Simple_image_server
 #endif
 
             InitializeComponent();
+
             lbLists.DrawMode = DrawMode.OwnerDrawFixed;
             lbLists.DrawItem += LbLists_DrawItem;
 
             ListsettingsGroupSetEnabled(false);
 
-            btnServertoggle.Text = "Start Server";
-            toolStripStatusLabel1.Text = $"Server not running";
+            btnServertoggle.Text = Resources.StartServer;
+            toolStripStatusLabel1.Text = Resources.ServerNotRunning;
             _timer = new System.Windows.Forms.Timer();
             _timer.Interval = 1000;
             _timer.Tick += new EventHandler(this.Timer_Tick);
             _timer.Start();
 
             SetAutostartText();
+        }
+
+        private void SetFormLocalizationTexts()
+        {
+            //Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(_settings.CultureInfoName);
+            Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+
+            // Apply localization to all controls
+            ResourceHelper.ApplyResources(this);
+
+            if(ResourceHelper.MissingResourceentries.ToString() != string.Empty)
+            {
+                Log(ResourceHelper.MissingResourceentries.ToString(), logLevel);
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -86,11 +104,11 @@ namespace Simple_image_server
         {
             if (AutoStartOnBootIsEnabled())
             {
-                btnStartOnBoot.Text = "Disable autostart on boot";
+                btnStartOnBoot.Text = Resources.DisableAutostartOnBoot;
             }
             else
             {
-                btnStartOnBoot.Text = "Enable autostart on boot";
+                btnStartOnBoot.Text = Resources.EnableAutostartOnBoot;
             }
         }
 
@@ -156,6 +174,27 @@ namespace Simple_image_server
         {
             // Get our settings...
             LoadSettings();
+            cmbLanguage.SelectedIndexChanged += (s, ee) =>
+            {
+                switch (cmbLanguage.SelectedItem.ToString())
+                {
+                    case "Dansk":
+                        _settings.CultureInfoName = "da-DK";
+                        break;
+                    case "English":
+                        _settings.CultureInfoName = "en-US";
+                        break;
+                }
+                SetFormLocalizationTexts();
+            };
+            if(_settings.CultureInfoName == "da-DK")
+            {
+                cmbLanguage.SelectedIndex = 1;
+            }
+            else
+            {
+                cmbLanguage.SelectedIndex = 0;
+            }
 
             _darkMode = new DarkModeTheme(this)
             {
@@ -188,18 +227,18 @@ namespace Simple_image_server
                     settingsJson = File.ReadAllText(_settingsPath);
                     if (!string.IsNullOrEmpty(settingsJson))
                     {
-                        _settings = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(settingsJson);
+                        _settings = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Settings>(settingsJson);
                         LoadLists();
                         return;
                     }
                 }
             }
             
-            _settings = new Settings
+            _settings = new Model.Settings
             {
                 AllowRemoteAccess = false,
                 Port = 9191,
-                DarkMode = true
+                DarkMode = true,
             };
         }
 
@@ -228,14 +267,14 @@ namespace Simple_image_server
                 serverThread.IsBackground = true;
                 isRunning = true;
                 serverThread.Start();
-                btnServertoggle.Text = "Stop Server";
+                btnServertoggle.Text = Resources.StopServer;
             }
             else
             {
                 isRunning = false;
                 httpListener.Stop();
-                btnServertoggle.Text = "Start Server";
-                toolStripStatusLabel1.Text = $"Server not running";
+                btnServertoggle.Text = Resources.StartServer;
+                toolStripStatusLabel1.Text = Resources.ServerNotRunning;
             }
         }
 
@@ -247,9 +286,9 @@ namespace Simple_image_server
 
             try
             {
-                Invoke(new Action(() => Log($"Starting server on port: {_settings.Port}", LogLevel.Info)));
+                Invoke(new Action(() => Log(string.Format(Resources.StartingServerOnPort, _settings.Port), LogLevel.Info)));
                 httpListener.Start();
-                toolStripStatusLabel1.Text = $"Server running on port {_settings.Port}";
+                toolStripStatusLabel1.Text = string.Format(Resources.ServerRunningOnPort, _settings.Port);
                 while (isRunning)
                 {
                     var context = await httpListener.GetContextAsync();
@@ -259,15 +298,15 @@ namespace Simple_image_server
             catch(HttpListenerException ex)
             {
                 isRunning = false;
-                Invoke(new Action(() => btnServertoggle.Text = "Start Server"));
+                Invoke(new Action(() => btnServertoggle.Text = Resources.StartServer));
                 
                 if (ex.NativeErrorCode != 995)
                 {
-                    MessageBox.Show("Error starting server: " + ex.Message);
+                    MessageBox.Show(string.Format(Resources.ErrorStartingServer, ex.Message));
                 }
             }
-            Invoke(new Action(() => Log($"Server stopped", LogLevel.Info)));
-            toolStripStatusLabel1.Text = "Server is stopped";
+            Invoke(new Action(() => Log(Resources.ServerNotRunning, LogLevel.Info)));
+            toolStripStatusLabel1.Text = Resources.ServerNotRunning;
         }
 
         private async Task HandleRequest(HttpListenerContext context)
@@ -334,15 +373,15 @@ namespace Simple_image_server
             }
             catch(HttpListenerException ex)
             {
-                Invoke(new Action(() => Log($"Client dropped connection: {ex.Message}", LogLevel.Info)));
+                Invoke(new Action(() => Log(string.Format(Resources.ClientDroppedConnection, ex.Message), LogLevel.Info)));
             }
             catch (IOException ex)
             {
-                Invoke(new Action(() => Log($"Network error: {ex.Message}", LogLevel.Info)));
+                Invoke(new Action(() => Log(string.Format(Resources.NetworkError, ex.Message), LogLevel.Info)));
             }
             catch (Exception ex)
             {
-                Invoke(new Action(() => Log($"Error handling request: {ex.Message}", LogLevel.Error)));
+                Invoke(new Action(() => Log(string.Format(Resources.ErrorHandlingRequest, ex.Message), LogLevel.Error)));
             }
         }
 
@@ -359,7 +398,7 @@ namespace Simple_image_server
 
             var list = GetFirstActivelistWithName(builder.Path.Replace("/", ""));
             var interval = 10000;
-            var title = "Simple Image Server";
+            var title = Resources.Form1;
             if (list != null)
             {
                 // wait one more second to make sure the new image is "ready"..
@@ -431,14 +470,14 @@ namespace Simple_image_server
             if(list == null)
             {
                 statuscode = 404;
-                statusmessage = "List not found";
+                statusmessage = Resources.ListNotFound;
                 return null;
             }
 
             if (list.Images.Count == 0)
             {
                 statuscode = 200;
-                statusmessage = "List empty";
+                statusmessage = Resources.EmptyList;
                 return null;
             }
 
@@ -591,7 +630,7 @@ namespace Simple_image_server
 
         private void btnAddNewList_Click(object sender, EventArgs e)
         {
-            var listname = Microsoft.VisualBasic.Interaction.InputBox("Enter listname", "Name", "", this.Left, this.Top);
+            var listname = Microsoft.VisualBasic.Interaction.InputBox(Resources.EnterListName, Resources.Name, "", this.Left, this.Top);
             if (!string.IsNullOrEmpty(listname))
             {
                 var list = new Model.Imagelist
@@ -758,7 +797,7 @@ namespace Simple_image_server
         {
             if(lbLists.SelectedItem == null)
             {
-                MessageBox.Show("Please select a list first");
+                MessageBox.Show(Resources.SelectListFirst);
                 return;
             }
 
@@ -766,7 +805,7 @@ namespace Simple_image_server
 
             openFileDialog1.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             openFileDialog1.Multiselect = true;
-            openFileDialog1.Title = "Select images to add to list";
+            openFileDialog1.Title = Resources.SelectImages;
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if (openFileDialog1.FileNames.Length > 0)
@@ -847,18 +886,18 @@ namespace Simple_image_server
             if (((Imagelist)item.Tag).IsActive == false)
             {
                 foreColor = Color.Orange;
-                txt += " (inactive)";
+                txt += Resources.Inactive;
             }
 
             // check other rules..
             if (((Imagelist)item.Tag).ActiveDays.HasFlag((OpenDays)(1 << (int)DateTime.Now.DayOfWeek)) == false)
             {
-                txt += " (inactive because weekday)";
+                txt += Resources.InactiveBecauseWeekday;
                 foreColor = Color.Yellow;
             }
             if (((Imagelist)item.Tag).IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute) == false)
             {
-                txt += " (inactive because time of day)";
+                txt += Resources.InactiveBecauseTimeOfDay;
                 foreColor = Color.Yellow;
             }
 
@@ -886,7 +925,7 @@ namespace Simple_image_server
                 var settingsFolder = Path.GetDirectoryName(_settingsPath);
                 if (!Directory.Exists(Path.GetDirectoryName(settingsFolder)))
                 {
-                    MessageBox.Show("Settings folder not found", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(Resources.SettingsFolderNotFound, Resources.Notice, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
@@ -900,7 +939,7 @@ namespace Simple_image_server
             }
             catch (Exception)
             {
-                MessageBox.Show("Settings folder could not be opened", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.SettingsfolderCouldNotBeOpened, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -979,7 +1018,7 @@ namespace Simple_image_server
 
             if(selectedList.Images.Count > 0)
             {
-                var result = MessageBox.Show("This list has images in it. Are you sure you want to delete it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var result = MessageBox.Show(Resources.ListContainsImagesWarning, Resources.Warning, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.No)
                 {
                     return;

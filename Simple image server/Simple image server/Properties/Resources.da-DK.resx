@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,115 +112,106 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Form1" xml:space="preserve">
-    <value>Simple Image Server</value>
+    <value>Simple Billede Server</value>
   </data>
   <data name="groupBox1" xml:space="preserve">
-    <value>Server settings</value>
+    <value>Server indstillinger</value>
   </data>
   <data name="groupBox4" xml:space="preserve">
-    <value>Log output</value>
+    <value>Log udskrift</value>
   </data>
   <data name="groupBox3" xml:space="preserve">
-    <value>Elements in list</value>
+    <value>Elementer i liste</value>
   </data>
   <data name="btnRemoveImage" xml:space="preserve">
-    <value>Remove image</value>
+    <value>Fjern billede</value>
   </data>
   <data name="btnAddToList" xml:space="preserve">
-    <value>Add</value>
+    <value>Tilføj</value>
   </data>
   <data name="groupBox2" xml:space="preserve">
-    <value>Lists</value>
+    <value>Lister</value>
   </data>
   <data name="btnDeleteSelectedList" xml:space="preserve">
-    <value>Delete list</value>
-  </data>
-  <data name="btnMoveListDown" xml:space="preserve">
-    <value>↓</value>
-  </data>
-  <data name="btnMoveListUp" xml:space="preserve">
-    <value>↑</value>
+    <value>Slet liste</value>
   </data>
   <data name="grpListsettings" xml:space="preserve">
-    <value>List settings</value>
+    <value>Liste indstillinger</value>
   </data>
   <data name="label9" xml:space="preserve">
-    <value>Description:</value>
+    <value>Beskrivelse:</value>
   </data>
   <data name="chkRandomImage" xml:space="preserve">
-    <value>Deliver random image from list</value>
+    <value>Levér tilfældigt billede fra listen</value>
   </data>
   <data name="label8" xml:space="preserve">
-    <value>Max width:</value>
+    <value>Maks bredde:</value>
   </data>
   <data name="label7" xml:space="preserve">
-    <value>Processing settings:</value>
+    <value>Indstillinger for processering:</value>
   </data>
   <data name="label6" xml:space="preserve">
-    <value>Interval (seconds each list shows same image):</value>
+    <value>Interval (Sekunder hvert billede i listen bliver vist):</value>
   </data>
   <data name="label5" xml:space="preserve">
-    <value>Listname:</value>
-  </data>
-  <data name="label4" xml:space="preserve">
-    <value>-</value>
+    <value>Listenavn:</value>
   </data>
   <data name="label3" xml:space="preserve">
-    <value>Active weekdays:</value>
+    <value>Aktive ugedage:</value>
   </data>
   <data name="label2" xml:space="preserve">
-    <value>Active timeperiod:</value>
+    <value>Aktiv tidsperiode:</value>
   </data>
   <data name="chkListTuesday" xml:space="preserve">
-    <value>Tuesday</value>
+    <value>Tirdsdag</value>
   </data>
   <data name="chkListWednesday" xml:space="preserve">
-    <value>Wednesday</value>
+    <value>Onsdag</value>
   </data>
   <data name="chkListThursday" xml:space="preserve">
-    <value>Thursday</value>
+    <value>Torsdag</value>
   </data>
   <data name="chkListFriday" xml:space="preserve">
-    <value>Friday</value>
+    <value>Fredag</value>
   </data>
   <data name="chkListSaturday" xml:space="preserve">
-    <value>Saturday</value>
+    <value>Lørdag</value>
   </data>
   <data name="chkListSunday" xml:space="preserve">
-    <value>Sunday</value>
+    <value>Søndag</value>
   </data>
   <data name="chkListMonday" xml:space="preserve">
-    <value>Monday</value>
+    <value>Mandag</value>
   </data>
   <data name="chkListActive" xml:space="preserve">
-    <value>Active</value>
+    <value>Aktiv</value>
   </data>
   <data name="btnAddNewList" xml:space="preserve">
-    <value>Add new list</value>
+    <value>Tilføj ny liste</value>
   </data>
   <data name="btnOpenSettingsfolder" xml:space="preserve">
-    <value>Open settings folder</value>
+    <value>Åben folder for gemte indstillinger</value>
   </data>
   <data name="DarkMode" xml:space="preserve">
-    <value>Dark mode</value>
+    <value>Mørk mode</value>
   </data>
   <data name="btnStartOnBoot" xml:space="preserve">
-    <value>Enable autostart on boot</value>
+    <value>Start med Windows</value>
   </data>
   <data name="chkAutostart" xml:space="preserve">
-    <value>Autostart server (Will minimize to tray on start)</value>
+    <value>Autostart server (Minimeres til tray ved opstart)</value>
   </data>
   <data name="label1" xml:space="preserve">
     <value>Port:</value>
   </data>
   <data name="chkAllowremoteAccess" xml:space="preserve">
-    <value>Allow remoteaccess</value>
+    <value>Tillad fjernadgang</value>
   </data>
   <data name="btnServertoggle" xml:space="preserve">
     <value>Start Server</value>
@@ -226,84 +220,84 @@
     <value>statusStrip1</value>
   </data>
   <data name="btnSaveSettingsNow" xml:space="preserve">
-    <value>Save settings now</value>
+    <value>Skriv indstillinger nu</value>
   </data>
   <data name="StartServer" xml:space="preserve">
     <value>Start server</value>
   </data>
   <data name="ServerNotRunning" xml:space="preserve">
-    <value>Server not running</value>
+    <value>Server kører ikke</value>
   </data>
   <data name="EnableAutostartOnBoot" xml:space="preserve">
-    <value>Enable autostart on boot</value>
+    <value>Aktiver automatisk opstart ved opstart</value>
   </data>
   <data name="DisableAutostartOnBoot" xml:space="preserve">
-    <value>Disable autostart on boot</value>
+    <value>Deaktiver automatisk opstart ved opstart</value>
   </data>
   <data name="StopServer" xml:space="preserve">
-    <value>Stop Server</value>
+    <value>Stop server</value>
   </data>
   <data name="StartingServerOnPort" xml:space="preserve">
-    <value>Starting server on port {0}</value>
+    <value>Starter server på port {0}</value>
   </data>
   <data name="ServerRunningOnPort" xml:space="preserve">
-    <value>Server running on port {0}</value>
+    <value>Server kører på port {0}</value>
   </data>
   <data name="ErrorStartingServer" xml:space="preserve">
-    <value>Error starting server {0}</value>
+    <value>Fejl ved opstart af server {0}</value>
   </data>
   <data name="ClientDroppedConnection" xml:space="preserve">
-    <value>Client dropped connection {0}</value>
+    <value>Klienten droppede forbindelsen {0}</value>
   </data>
   <data name="NetworkError" xml:space="preserve">
-    <value>Network error {0}</value>
+    <value>Netværks fejl {0}</value>
   </data>
   <data name="ErrorHandlingRequest" xml:space="preserve">
-    <value>Error handling request {0}</value>
+    <value>Fejl ved håndtering af forespørgelse {0}</value>
   </data>
   <data name="ListNotFound" xml:space="preserve">
-    <value>List not found</value>
+    <value>Liste ikke fundet</value>
   </data>
   <data name="EmptyList" xml:space="preserve">
-    <value>Empty list</value>
+    <value>Tom liste</value>
   </data>
   <data name="EnterListName" xml:space="preserve">
-    <value>Enter list name</value>
+    <value>Skriv liste navn</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Navn</value>
   </data>
   <data name="SelectListFirst" xml:space="preserve">
-    <value>Please select list first</value>
+    <value>Vær venlig at vælge en liste først</value>
   </data>
   <data name="SelectImages" xml:space="preserve">
-    <value>Select images to add to list</value>
+    <value>Vælg billeder, som skal tilføjes listen</value>
   </data>
   <data name="Inactive" xml:space="preserve">
-    <value> (inactive)</value>
+    <value> (ikke aktiv)</value>
   </data>
   <data name="InactiveBecauseWeekday" xml:space="preserve">
-    <value> (inactive because weekday)</value>
+    <value> (ikke aktiv pga ugedagsfilter)</value>
   </data>
   <data name="InactiveBecauseTimeOfDay" xml:space="preserve">
-    <value> (inactive because time of day)</value>
+    <value> (ikke aktive pga tidspunktsfilter)</value>
   </data>
   <data name="SettingsFolderNotFound" xml:space="preserve">
-    <value>Settings folder not found</value>
+    <value>Indstilinger folderen blev ikke fundet</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Notice</value>
+    <value>Bemærk</value>
   </data>
   <data name="SettingsfolderCouldNotBeOpened" xml:space="preserve">
-    <value>Settings folder could not be opened</value>
+    <value>Indstillinger folderen kunne ikke åbnes</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Fejl</value>
   </data>
   <data name="ListContainsImagesWarning" xml:space="preserve">
-    <value>This list has images in it. Are you sure you want to delete it?</value>
+    <value>Denne liste indeholder billeder. Er du sikker på du vil slette den?</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Advarsel</value>
   </data>
 </root>
