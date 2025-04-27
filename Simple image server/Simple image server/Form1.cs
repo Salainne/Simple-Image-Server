@@ -285,6 +285,7 @@ namespace Simple_image_server
                         //response.ContentType = "application/json";
                         response.ContentType = "text/plain";
                         response.StatusCode = statuscode;
+                        statusmessage = $"OK json index";
                     }
                     else
                     {
@@ -494,6 +495,27 @@ namespace Simple_image_server
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.WindowsShutDown ||
+            e.CloseReason == CloseReason.TaskManagerClosing ||
+            e.CloseReason == CloseReason.ApplicationExitCall)
+            {
+                try
+                {
+                    if (isRunning)
+                    {
+                        httpListener.Stop();
+                    }
+                }
+                catch
+                {
+
+                }
+                isRunning = false;
+                SaveSettings();
+                return;
+            }
+
+            // If the form is closing for any other reason, we want to minimize it to the system tray
             if (isRunning)
             {
                 e.Cancel = true;
