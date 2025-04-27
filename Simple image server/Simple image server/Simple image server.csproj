@@ -95,6 +95,12 @@
   <ItemGroup>
     <Content Include="Assets\ChatGPT Image Apr 25, 2025, 07_05_28 PM.ico" />
     <Content Include="Assets\ChatGPT Image Apr 25, 2025, 07_05_28 PM.png" />
+    <Content Include="Assets\htmltemplate01.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\htmltemplate02.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

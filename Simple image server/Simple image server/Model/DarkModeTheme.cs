@@ -281,7 +281,7 @@ namespace Simple_image_server.Model
 
         private IntPtr originalWndProc;
         private WndProc newWndProcDelegate;
-        private IntPtr formHandle;
+        //private IntPtr formHandle;
         private bool applyingTheme; // Flag to prevent recursion
 
         #endregion

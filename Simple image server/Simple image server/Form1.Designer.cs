@@ -34,6 +34,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSaveSettingsNow = new System.Windows.Forms.Button();
             this.DarkMode = new System.Windows.Forms.CheckBox();
             this.btnStartOnBoot = new System.Windows.Forms.Button();
             this.chkAutostart = new System.Windows.Forms.CheckBox();
@@ -43,6 +44,8 @@
             this.btnServertoggle = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.grpListsettings = new System.Windows.Forms.GroupBox();
+            this.numInterval = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             this.txtListname = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -69,13 +72,22 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnSaveSettingsNow = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numInterval = new System.Windows.Forms.NumericUpDown();
+            this.btnOpenSettingsfolder = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numMaxWidth = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.chkRandomImage = new System.Windows.Forms.CheckBox();
+            this.btnMoveListUp = new System.Windows.Forms.Button();
+            this.btnMoveListDown = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtListdescription = new System.Windows.Forms.TextBox();
+            this.btnRemoveImage = new System.Windows.Forms.Button();
+            this.btnDeleteSelectedList = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.grpListsettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromMinute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromHour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numToMinute)).BeginInit();
@@ -83,7 +95,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -98,10 +110,10 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 1420);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1272);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(2301, 32);
+            this.statusStrip1.Size = new System.Drawing.Size(2095, 32);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -116,6 +128,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnOpenSettingsfolder);
             this.groupBox1.Controls.Add(this.btnSaveSettingsNow);
             this.groupBox1.Controls.Add(this.DarkMode);
             this.groupBox1.Controls.Add(this.btnStartOnBoot);
@@ -126,10 +139,21 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(2277, 89);
+            this.groupBox1.Size = new System.Drawing.Size(2071, 89);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
+            // 
+            // btnSaveSettingsNow
+            // 
+            this.btnSaveSettingsNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveSettingsNow.Location = new System.Drawing.Point(1557, 25);
+            this.btnSaveSettingsNow.Name = "btnSaveSettingsNow";
+            this.btnSaveSettingsNow.Size = new System.Drawing.Size(160, 52);
+            this.btnSaveSettingsNow.TabIndex = 8;
+            this.btnSaveSettingsNow.Text = "Save settings now";
+            this.btnSaveSettingsNow.UseVisualStyleBackColor = true;
+            this.btnSaveSettingsNow.Click += new System.EventHandler(this.btnSaveSettingsNow_Click);
             // 
             // DarkMode
             // 
@@ -146,7 +170,7 @@
             // btnStartOnBoot
             // 
             this.btnStartOnBoot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStartOnBoot.Location = new System.Drawing.Point(1929, 25);
+            this.btnStartOnBoot.Location = new System.Drawing.Point(1723, 25);
             this.btnStartOnBoot.Name = "btnStartOnBoot";
             this.btnStartOnBoot.Size = new System.Drawing.Size(204, 52);
             this.btnStartOnBoot.TabIndex = 6;
@@ -193,7 +217,7 @@
             // btnServertoggle
             // 
             this.btnServertoggle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnServertoggle.Location = new System.Drawing.Point(2139, 25);
+            this.btnServertoggle.Location = new System.Drawing.Point(1933, 25);
             this.btnServertoggle.Name = "btnServertoggle";
             this.btnServertoggle.Size = new System.Drawing.Size(124, 52);
             this.btnServertoggle.TabIndex = 1;
@@ -205,12 +229,15 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.btnDeleteSelectedList);
+            this.groupBox2.Controls.Add(this.btnMoveListDown);
+            this.groupBox2.Controls.Add(this.btnMoveListUp);
             this.groupBox2.Controls.Add(this.grpListsettings);
             this.groupBox2.Controls.Add(this.lbLists);
             this.groupBox2.Controls.Add(this.btnAddNewList);
             this.groupBox2.Location = new System.Drawing.Point(12, 108);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(592, 1295);
+            this.groupBox2.Size = new System.Drawing.Size(592, 1147);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Lists";
@@ -219,6 +246,12 @@
             // 
             this.grpListsettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpListsettings.Controls.Add(this.txtListdescription);
+            this.grpListsettings.Controls.Add(this.label9);
+            this.grpListsettings.Controls.Add(this.chkRandomImage);
+            this.grpListsettings.Controls.Add(this.label8);
+            this.grpListsettings.Controls.Add(this.numMaxWidth);
+            this.grpListsettings.Controls.Add(this.label7);
             this.grpListsettings.Controls.Add(this.numInterval);
             this.grpListsettings.Controls.Add(this.label6);
             this.grpListsettings.Controls.Add(this.txtListname);
@@ -238,12 +271,43 @@
             this.grpListsettings.Controls.Add(this.chkListSunday);
             this.grpListsettings.Controls.Add(this.chkListMonday);
             this.grpListsettings.Controls.Add(this.chkListActive);
-            this.grpListsettings.Location = new System.Drawing.Point(20, 842);
+            this.grpListsettings.Location = new System.Drawing.Point(20, 574);
             this.grpListsettings.Name = "grpListsettings";
-            this.grpListsettings.Size = new System.Drawing.Size(554, 388);
+            this.grpListsettings.Size = new System.Drawing.Size(554, 508);
             this.grpListsettings.TabIndex = 2;
             this.grpListsettings.TabStop = false;
             this.grpListsettings.Text = "List settings";
+            // 
+            // numInterval
+            // 
+            this.numInterval.Location = new System.Drawing.Point(11, 335);
+            this.numInterval.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.numInterval.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numInterval.Name = "numInterval";
+            this.numInterval.Size = new System.Drawing.Size(94, 26);
+            this.numInterval.TabIndex = 20;
+            this.numInterval.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 312);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(340, 20);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Interval (seconds each list shows same image):";
             // 
             // txtListname
             // 
@@ -264,7 +328,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(142, 233);
+            this.label4.Location = new System.Drawing.Point(142, 275);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(14, 20);
             this.label4.TabIndex = 16;
@@ -272,7 +336,7 @@
             // 
             // numFromMinute
             // 
-            this.numFromMinute.Location = new System.Drawing.Point(76, 231);
+            this.numFromMinute.Location = new System.Drawing.Point(76, 273);
             this.numFromMinute.Maximum = new decimal(new int[] {
             59,
             0,
@@ -284,7 +348,7 @@
             // 
             // numFromHour
             // 
-            this.numFromHour.Location = new System.Drawing.Point(10, 231);
+            this.numFromHour.Location = new System.Drawing.Point(10, 273);
             this.numFromHour.Maximum = new decimal(new int[] {
             23,
             0,
@@ -296,7 +360,7 @@
             // 
             // numToMinute
             // 
-            this.numToMinute.Location = new System.Drawing.Point(228, 231);
+            this.numToMinute.Location = new System.Drawing.Point(228, 273);
             this.numToMinute.Maximum = new decimal(new int[] {
             59,
             0,
@@ -313,7 +377,7 @@
             // 
             // numToHour
             // 
-            this.numToHour.Location = new System.Drawing.Point(162, 231);
+            this.numToHour.Location = new System.Drawing.Point(162, 273);
             this.numToHour.Maximum = new decimal(new int[] {
             23,
             0,
@@ -331,7 +395,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 109);
+            this.label3.Location = new System.Drawing.Point(6, 151);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(130, 20);
             this.label3.TabIndex = 11;
@@ -340,7 +404,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 208);
+            this.label2.Location = new System.Drawing.Point(6, 250);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(134, 20);
             this.label2.TabIndex = 10;
@@ -349,7 +413,7 @@
             // chkListTuesday
             // 
             this.chkListTuesday.AutoSize = true;
-            this.chkListTuesday.Location = new System.Drawing.Point(109, 142);
+            this.chkListTuesday.Location = new System.Drawing.Point(109, 184);
             this.chkListTuesday.Name = "chkListTuesday";
             this.chkListTuesday.Size = new System.Drawing.Size(95, 24);
             this.chkListTuesday.TabIndex = 7;
@@ -359,7 +423,7 @@
             // chkListWednesday
             // 
             this.chkListWednesday.AutoSize = true;
-            this.chkListWednesday.Location = new System.Drawing.Point(211, 142);
+            this.chkListWednesday.Location = new System.Drawing.Point(211, 184);
             this.chkListWednesday.Name = "chkListWednesday";
             this.chkListWednesday.Size = new System.Drawing.Size(119, 24);
             this.chkListWednesday.TabIndex = 6;
@@ -369,7 +433,7 @@
             // chkListThursday
             // 
             this.chkListThursday.AutoSize = true;
-            this.chkListThursday.Location = new System.Drawing.Point(338, 142);
+            this.chkListThursday.Location = new System.Drawing.Point(338, 184);
             this.chkListThursday.Name = "chkListThursday";
             this.chkListThursday.Size = new System.Drawing.Size(100, 24);
             this.chkListThursday.TabIndex = 5;
@@ -379,7 +443,7 @@
             // chkListFriday
             // 
             this.chkListFriday.AutoSize = true;
-            this.chkListFriday.Location = new System.Drawing.Point(447, 142);
+            this.chkListFriday.Location = new System.Drawing.Point(447, 184);
             this.chkListFriday.Name = "chkListFriday";
             this.chkListFriday.Size = new System.Drawing.Size(78, 24);
             this.chkListFriday.TabIndex = 4;
@@ -389,7 +453,7 @@
             // chkListSaturday
             // 
             this.chkListSaturday.AutoSize = true;
-            this.chkListSaturday.Location = new System.Drawing.Point(6, 172);
+            this.chkListSaturday.Location = new System.Drawing.Point(6, 214);
             this.chkListSaturday.Name = "chkListSaturday";
             this.chkListSaturday.Size = new System.Drawing.Size(99, 24);
             this.chkListSaturday.TabIndex = 3;
@@ -399,7 +463,7 @@
             // chkListSunday
             // 
             this.chkListSunday.AutoSize = true;
-            this.chkListSunday.Location = new System.Drawing.Point(109, 172);
+            this.chkListSunday.Location = new System.Drawing.Point(109, 214);
             this.chkListSunday.Name = "chkListSunday";
             this.chkListSunday.Size = new System.Drawing.Size(89, 24);
             this.chkListSunday.TabIndex = 2;
@@ -409,7 +473,7 @@
             // chkListMonday
             // 
             this.chkListMonday.AutoSize = true;
-            this.chkListMonday.Location = new System.Drawing.Point(6, 142);
+            this.chkListMonday.Location = new System.Drawing.Point(6, 184);
             this.chkListMonday.Name = "chkListMonday";
             this.chkListMonday.Size = new System.Drawing.Size(91, 24);
             this.chkListMonday.TabIndex = 1;
@@ -435,14 +499,14 @@
             this.lbLists.ItemHeight = 20;
             this.lbLists.Location = new System.Drawing.Point(20, 25);
             this.lbLists.Name = "lbLists";
-            this.lbLists.Size = new System.Drawing.Size(554, 764);
+            this.lbLists.Size = new System.Drawing.Size(525, 524);
             this.lbLists.TabIndex = 1;
             this.lbLists.SelectedIndexChanged += new System.EventHandler(this.lbLists_SelectedIndexChanged);
             // 
             // btnAddNewList
             // 
             this.btnAddNewList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddNewList.Location = new System.Drawing.Point(450, 1235);
+            this.btnAddNewList.Location = new System.Drawing.Point(450, 1087);
             this.btnAddNewList.Name = "btnAddNewList";
             this.btnAddNewList.Size = new System.Drawing.Size(124, 35);
             this.btnAddNewList.TabIndex = 0;
@@ -454,11 +518,12 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox3.Controls.Add(this.btnRemoveImage);
             this.groupBox3.Controls.Add(this.lbElementsInList);
             this.groupBox3.Controls.Add(this.btnAddToList);
             this.groupBox3.Location = new System.Drawing.Point(610, 108);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(530, 1295);
+            this.groupBox3.Size = new System.Drawing.Size(530, 1147);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Elements in list";
@@ -472,14 +537,14 @@
             this.lbElementsInList.ItemHeight = 20;
             this.lbElementsInList.Location = new System.Drawing.Point(6, 25);
             this.lbElementsInList.Name = "lbElementsInList";
-            this.lbElementsInList.Size = new System.Drawing.Size(517, 1204);
+            this.lbElementsInList.Size = new System.Drawing.Size(517, 1044);
             this.lbElementsInList.TabIndex = 1;
             this.lbElementsInList.SelectedIndexChanged += new System.EventHandler(this.lbElementsInList_SelectedIndexChanged);
             // 
             // btnAddToList
             // 
             this.btnAddToList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddToList.Location = new System.Drawing.Point(448, 1235);
+            this.btnAddToList.Location = new System.Drawing.Point(448, 1087);
             this.btnAddToList.Name = "btnAddToList";
             this.btnAddToList.Size = new System.Drawing.Size(75, 35);
             this.btnAddToList.TabIndex = 0;
@@ -496,7 +561,7 @@
             this.groupBox4.Controls.Add(this.txtLog);
             this.groupBox4.Location = new System.Drawing.Point(1144, 108);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(1143, 1295);
+            this.groupBox4.Size = new System.Drawing.Size(937, 1147);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Log output";
@@ -508,7 +573,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbPreview.Location = new System.Drawing.Point(6, 574);
             this.pbPreview.Name = "pbPreview";
-            this.pbPreview.Size = new System.Drawing.Size(1125, 715);
+            this.pbPreview.Size = new System.Drawing.Size(919, 567);
             this.pbPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbPreview.TabIndex = 3;
             this.pbPreview.TabStop = false;
@@ -522,65 +587,142 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(1124, 541);
+            this.txtLog.Size = new System.Drawing.Size(918, 541);
             this.txtLog.TabIndex = 2;
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // btnSaveSettingsNow
+            // btnOpenSettingsfolder
             // 
-            this.btnSaveSettingsNow.Location = new System.Drawing.Point(1763, 25);
-            this.btnSaveSettingsNow.Name = "btnSaveSettingsNow";
-            this.btnSaveSettingsNow.Size = new System.Drawing.Size(160, 52);
-            this.btnSaveSettingsNow.TabIndex = 8;
-            this.btnSaveSettingsNow.Text = "Save settings now";
-            this.btnSaveSettingsNow.UseVisualStyleBackColor = true;
-            this.btnSaveSettingsNow.Click += new System.EventHandler(this.btnSaveSettingsNow_Click);
+            this.btnOpenSettingsfolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenSettingsfolder.Location = new System.Drawing.Point(1385, 25);
+            this.btnOpenSettingsfolder.Name = "btnOpenSettingsfolder";
+            this.btnOpenSettingsfolder.Size = new System.Drawing.Size(166, 52);
+            this.btnOpenSettingsfolder.TabIndex = 9;
+            this.btnOpenSettingsfolder.Text = "Open settings folder";
+            this.btnOpenSettingsfolder.UseVisualStyleBackColor = true;
+            this.btnOpenSettingsfolder.Click += new System.EventHandler(this.btnOpenSettingsfolder_Click);
             // 
-            // label6
+            // label7
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 270);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(340, 20);
-            this.label6.TabIndex = 19;
-            this.label6.Text = "Interval (seconds each list shows same image):";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 374);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(151, 20);
+            this.label7.TabIndex = 21;
+            this.label7.Text = "Processing settings:";
             // 
-            // numInterval
+            // numMaxWidth
             // 
-            this.numInterval.Location = new System.Drawing.Point(11, 293);
-            this.numInterval.Maximum = new decimal(new int[] {
-            600,
+            this.numMaxWidth.Location = new System.Drawing.Point(105, 401);
+            this.numMaxWidth.Maximum = new decimal(new int[] {
+            3200,
             0,
             0,
             0});
-            this.numInterval.Minimum = new decimal(new int[] {
-            1,
+            this.numMaxWidth.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
             0});
-            this.numInterval.Name = "numInterval";
-            this.numInterval.Size = new System.Drawing.Size(94, 26);
-            this.numInterval.TabIndex = 20;
-            this.numInterval.Value = new decimal(new int[] {
-            5,
+            this.numMaxWidth.Name = "numMaxWidth";
+            this.numMaxWidth.Size = new System.Drawing.Size(80, 26);
+            this.numMaxWidth.TabIndex = 22;
+            this.numMaxWidth.Value = new decimal(new int[] {
+            3200,
             0,
             0,
             0});
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(14, 403);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(83, 20);
+            this.label8.TabIndex = 23;
+            this.label8.Text = "Max width:";
+            // 
+            // chkRandomImage
+            // 
+            this.chkRandomImage.AutoSize = true;
+            this.chkRandomImage.Location = new System.Drawing.Point(18, 433);
+            this.chkRandomImage.Name = "chkRandomImage";
+            this.chkRandomImage.Size = new System.Drawing.Size(247, 24);
+            this.chkRandomImage.TabIndex = 24;
+            this.chkRandomImage.Text = "Deliver random image from list";
+            this.chkRandomImage.UseVisualStyleBackColor = true;
+            // 
+            // btnMoveListUp
+            // 
+            this.btnMoveListUp.Location = new System.Drawing.Point(551, 302);
+            this.btnMoveListUp.Name = "btnMoveListUp";
+            this.btnMoveListUp.Size = new System.Drawing.Size(34, 41);
+            this.btnMoveListUp.TabIndex = 3;
+            this.btnMoveListUp.Text = "↑";
+            this.btnMoveListUp.UseVisualStyleBackColor = true;
+            this.btnMoveListUp.Click += new System.EventHandler(this.btnMoveListUp_Click);
+            // 
+            // btnMoveListDown
+            // 
+            this.btnMoveListDown.Location = new System.Drawing.Point(552, 349);
+            this.btnMoveListDown.Name = "btnMoveListDown";
+            this.btnMoveListDown.Size = new System.Drawing.Size(34, 40);
+            this.btnMoveListDown.TabIndex = 4;
+            this.btnMoveListDown.Text = "↓";
+            this.btnMoveListDown.UseVisualStyleBackColor = true;
+            this.btnMoveListDown.Click += new System.EventHandler(this.btnMoveListDown_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 96);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(93, 20);
+            this.label9.TabIndex = 25;
+            this.label9.Text = "Description:";
+            // 
+            // txtListdescription
+            // 
+            this.txtListdescription.Location = new System.Drawing.Point(105, 90);
+            this.txtListdescription.Name = "txtListdescription";
+            this.txtListdescription.Size = new System.Drawing.Size(443, 26);
+            this.txtListdescription.TabIndex = 26;
+            // 
+            // btnRemoveImage
+            // 
+            this.btnRemoveImage.Location = new System.Drawing.Point(6, 1087);
+            this.btnRemoveImage.Name = "btnRemoveImage";
+            this.btnRemoveImage.Size = new System.Drawing.Size(125, 32);
+            this.btnRemoveImage.TabIndex = 2;
+            this.btnRemoveImage.Text = "Remove image";
+            this.btnRemoveImage.UseVisualStyleBackColor = true;
+            this.btnRemoveImage.Click += new System.EventHandler(this.btnRemoveImage_Click);
+            // 
+            // btnDeleteSelectedList
+            // 
+            this.btnDeleteSelectedList.Location = new System.Drawing.Point(20, 1092);
+            this.btnDeleteSelectedList.Name = "btnDeleteSelectedList";
+            this.btnDeleteSelectedList.Size = new System.Drawing.Size(124, 35);
+            this.btnDeleteSelectedList.TabIndex = 5;
+            this.btnDeleteSelectedList.Text = "Delete list";
+            this.btnDeleteSelectedList.UseVisualStyleBackColor = true;
+            this.btnDeleteSelectedList.Click += new System.EventHandler(this.btnDeleteSelectedList_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2301, 1452);
+            this.ClientSize = new System.Drawing.Size(2095, 1304);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1670, 1111);
             this.Name = "Form1";
             this.Text = "Simple image server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -593,6 +735,7 @@
             this.groupBox2.ResumeLayout(false);
             this.grpListsettings.ResumeLayout(false);
             this.grpListsettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromMinute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromHour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numToMinute)).EndInit();
@@ -601,7 +744,7 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxWidth)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -650,6 +793,17 @@
         private System.Windows.Forms.Button btnSaveSettingsNow;
         private System.Windows.Forms.NumericUpDown numInterval;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnOpenSettingsfolder;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numMaxWidth;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox chkRandomImage;
+        private System.Windows.Forms.Button btnMoveListDown;
+        private System.Windows.Forms.Button btnMoveListUp;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtListdescription;
+        private System.Windows.Forms.Button btnRemoveImage;
+        private System.Windows.Forms.Button btnDeleteSelectedList;
     }
 }
 

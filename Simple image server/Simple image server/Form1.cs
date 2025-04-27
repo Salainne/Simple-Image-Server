@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,9 +25,9 @@ namespace Simple_image_server
     {
         enum LogLevel
         {
-            Info,
-            Warning,
-            Error
+            Info = 0,
+            Warning = 1,
+            Error = 2
         }
 
         private string _settingsPath;
@@ -36,10 +39,12 @@ namespace Simple_image_server
         private Model.Settings _settings;
         private string _contentLocation = Application.StartupPath + "/content";
         private string _appName = "SimpleImageServer";
+        private Random _random = new Random();
 
         private Dictionary<string, Model.Client> _clientIds = new Dictionary<string, Model.Client>();
         
         private DarkModeTheme _darkMode = null;
+        private System.Windows.Forms.Timer _timer = null;
 
         public Form1()
         {
@@ -56,8 +61,17 @@ namespace Simple_image_server
 
             btnServertoggle.Text = "Start Server";
             toolStripStatusLabel1.Text = $"Server not running";
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Interval = 1000;
+            _timer.Tick += new EventHandler(this.Timer_Tick);
+            _timer.Start();
 
             SetAutostartText();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            lbLists.Invalidate();
         }
 
         private void ListsettingsGroupSetEnabled(bool enabled)
@@ -171,17 +185,17 @@ namespace Simple_image_server
             {
                 if (File.Exists(_settingsPath))
                 {
-                    settingsJson = System.IO.File.ReadAllText(_settingsPath);
+                    settingsJson = File.ReadAllText(_settingsPath);
                     if (!string.IsNullOrEmpty(settingsJson))
                     {
-                        _settings = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Settings>(settingsJson);
+                        _settings = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(settingsJson);
                         LoadLists();
                         return;
                     }
                 }
             }
             
-            _settings = new Model.Settings
+            _settings = new Settings
             {
                 AllowRemoteAccess = false,
                 Port = 9191,
@@ -198,12 +212,12 @@ namespace Simple_image_server
 
             if (!Directory.Exists(Path.GetDirectoryName(_settingsPath)))
             {
-                // we should probaly not create the directory unless the settings have been changed? hmm..
+                // we should probaly not create the directory unless the settings has been changed? hmm..
                 Directory.CreateDirectory(Path.GetDirectoryName(_settingsPath));
             }
 
             var settingsJson = Newtonsoft.Json.JsonConvert.SerializeObject(_settings, Newtonsoft.Json.Formatting.Indented);
-            System.IO.File.WriteAllText(_settingsPath, settingsJson);
+            File.WriteAllText(_settingsPath, settingsJson);
         }
 
         private void btnServertoggle_Click(object sender, EventArgs e)
@@ -239,7 +253,7 @@ namespace Simple_image_server
                 while (isRunning)
                 {
                     var context = await httpListener.GetContextAsync();
-                    HandleRequest(context);
+                    await HandleRequest(context);
                 }
             }
             catch(HttpListenerException ex)
@@ -272,7 +286,6 @@ namespace Simple_image_server
                     var width = request.QueryString["width"] != null ? int.Parse(request.QueryString["width"]) : 0;
                     var format = request.QueryString["format"] != null ? request.QueryString["format"] : "image";
 
-                    //response.ContentType = "image/jpeg";
                     response.ContentType = "image/png";
 
                     byte[] resultBytes = null;
@@ -282,10 +295,16 @@ namespace Simple_image_server
                     if (format == "json")
                     {
                         resultBytes = GetJsonResponse(clientid, cropToSquare, width, request.Url);
-                        //response.ContentType = "application/json";
                         response.ContentType = "text/plain";
                         response.StatusCode = statuscode;
                         statusmessage = $"OK json index";
+                    }
+                    else if (format == "htmltemplate01" || format == "htmltemplate02")
+                    {
+                        resultBytes = GetHtmlTemplateResponse(format, clientid, cropToSquare, width, request.Url);
+                        response.ContentType = "text/html";
+                        response.StatusCode = statuscode;
+                        statusmessage = $"OK htmltemplate index";
                     }
                     else
                     {
@@ -327,6 +346,37 @@ namespace Simple_image_server
             }
         }
 
+        private byte[] GetHtmlTemplateResponse(string templatename, string clientid, bool cropToSquare, int width, Uri uri)
+        {
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            query.Remove("format");
+            var builder = new UriBuilder(uri)
+            {
+                Query = query.ToString()
+            };
+
+            var template = File.ReadAllText("assets/" + templatename + ".html");
+
+            var list = GetFirstActivelistWithName(builder.Path.Replace("/", ""));
+            var interval = 10000;
+            var title = "Simple Image Server";
+            if (list != null)
+            {
+                // wait one more second to make sure the new image is "ready"..
+                interval = (list.Interval + 1) * 1000;
+                title = list.Name;
+                if(!string.IsNullOrEmpty(list.Description))
+                {
+                    title += " - " + list.Description;
+                }
+            }
+            var parsedTemplate = template.Replace("[URI]", builder.Uri.ToString());
+            parsedTemplate = parsedTemplate.Replace("[INTERVAL]", interval.ToString());
+            parsedTemplate = parsedTemplate.Replace("[TITLE]", title);
+
+            return Encoding.UTF8.GetBytes(parsedTemplate);
+        }
+
         private byte[] GetJsonResponse(
             string clientid,
             bool cropToSquare,
@@ -359,7 +409,7 @@ namespace Simple_image_server
         {
             if (!_clientIds.ContainsKey(clientid))
             {
-                _clientIds.Add(clientid, new Model.Client
+                _clientIds.Add(clientid, new Client
                 {
                     Id = clientid,
                     LastServedImageId = 0,
@@ -392,11 +442,6 @@ namespace Simple_image_server
                 return null;
             }
 
-            if (client.LastServedImageId >= list.Images.Count)
-            {
-                client.LastServedImageId = 0;
-            }
-
             var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
 
             if (cropToSquare)
@@ -404,15 +449,28 @@ namespace Simple_image_server
                 bytes = CropToSquare(bytes);
             }
 
-            if(width > 0)
+            if (width > 3200)
             {
-                bytes = ResizeImage(bytes, width);
+                width = 3200;
+            }
+            if (width > 0 || (list.MaxWidth > 0 && width == 0))
+            {
+                bytes = ResizeImage(bytes, width > 0 ? width : list.MaxWidth);
             }
 
-            if(client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
+
+            if (client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
             {
                 client.LastNewImagetime = DateTime.Now;
                 client.LastServedImageId++;
+                if (client.LastServedImageId >= list.Images.Count)
+                {
+                    client.LastServedImageId = 0;
+                }
+                if (list.UseRandomImage)
+                {
+                    client.LastServedImageId = _random.Next(0, list.Images.Count);
+                }
             }
             
             statuscode = 200;
@@ -422,7 +480,6 @@ namespace Simple_image_server
 
         private Imagelist GetFirstActivelistWithName(string filePath)
         {
-            //var list = _settings.Lists.FirstOrDefault(a => string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase));
             var lists = _settings.Lists.Where(
                 a => 
                 string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase) && 
@@ -433,6 +490,7 @@ namespace Simple_image_server
 
             return lists.FirstOrDefault();
         }
+
 
         public static byte[] CropToSquare(byte[] imageBytes)
         {
@@ -462,17 +520,17 @@ namespace Simple_image_server
             using (var inputStream = new MemoryStream(imageBytes))
             using (var originalImage = Image.FromStream(inputStream))
             {
-                // Beregn højden baseret på aspect ratioen af det oprindelige billede
+                if(originalImage.Width < width)
+                {
+                    return imageBytes;
+                }
+
                 int height = (int)(originalImage.Height * ((float)width / originalImage.Width));
 
-                // Resize the image to the specified width and calculated height
                 using (var resizedBitmap = new Bitmap(originalImage, new Size(width, height)))
                 using (var graphics = Graphics.FromImage(resizedBitmap))
                 {
-                    // Set the interpolation mode for high-quality resizing
                     graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-
-                    // Draw the resized image into a new bitmap
                     graphics.DrawImage(originalImage, 0, 0, width, height);
 
                     using (var outputStream = new MemoryStream())
@@ -486,6 +544,10 @@ namespace Simple_image_server
 
         private void Log(string message, LogLevel logLevel)
         {
+            if(logLevel < this.logLevel)
+            {
+                return;
+            }
             var sb = new StringBuilder();
             sb.AppendLine($"{DateTime.Now}: {message}");
             sb.Append(string.Join(Environment.NewLine, txtLog.Lines.Take(30).ToArray()));
@@ -540,6 +602,7 @@ namespace Simple_image_server
                 _settings.Lists.Add(list);
             }
             LoadLists();
+            lbLists.SelectedIndex = lbLists.Items.Count - 1;
         }
 
         private void LoadLists()
@@ -549,7 +612,7 @@ namespace Simple_image_server
                 lbLists.Items.Clear();
                 foreach (var list in _settings.Lists)
                 {
-                    var item = new Model.ListboxItemWrapper
+                    var item = new ListboxItemWrapper
                     {
                         Name = list.Name,
                         Tag = list
@@ -561,23 +624,23 @@ namespace Simple_image_server
 
         private void lbLists_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((Simple_image_server.Model.ListboxItemWrapper)((ListBox)sender).SelectedItem == null)
+            if ((ListboxItemWrapper)((ListBox)sender).SelectedItem == null)
             {
                 return;
             }
 
             ListsettingsGroupSetEnabled(true);
 
-            var theElement = ((Simple_image_server.Model.ListboxItemWrapper)((ListBox)sender).SelectedItem).Tag;
+            var theElement = ((ListboxItemWrapper)((ListBox)sender).SelectedItem).Tag;
 
             lbElementsInList.Items.Clear();
             if (theElement != null)
             {
-                var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Model.Imagelist)theElement).Id);
+                var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)theElement).Id);
                 LoadListsettings(list);
                 foreach (var image in list.Images)
                 {
-                    var item = new Model.ListboxItemWrapper
+                    var item = new ListboxItemWrapper
                     {
                         Name = image.Path,
                         Tag = image
@@ -598,17 +661,17 @@ namespace Simple_image_server
 
                 if (c.GetType() == typeof(System.Windows.Forms.CheckBox))
                 {
-                    ((System.Windows.Forms.CheckBox)c).CheckedChanged -= new System.EventHandler(this.SetListsettings);
+                    ((System.Windows.Forms.CheckBox)c).CheckedChanged -= new EventHandler(this.SetListsettings);
                     continue;
                 }
-                if (c.GetType() == typeof(System.Windows.Forms.TextBox))
+                if (c.GetType() == typeof(TextBox))
                 {
-                    ((System.Windows.Forms.TextBox)c).TextChanged -= new System.EventHandler(this.SetListsettings);
+                    ((TextBox)c).TextChanged -= new EventHandler(this.SetListsettings);
                     continue;
                 }
-                if (c.GetType() == typeof(System.Windows.Forms.NumericUpDown))
+                if (c.GetType() == typeof(NumericUpDown))
                 {
-                    ((System.Windows.Forms.NumericUpDown)c).ValueChanged -= new System.EventHandler(this.SetListsettings);
+                    ((NumericUpDown)c).ValueChanged -= new EventHandler(this.SetListsettings);
                     continue;
                 }
             }
@@ -627,28 +690,31 @@ namespace Simple_image_server
             numToHour.Value = item.GetEndTime().Hours;
             numToMinute.Value = item.GetEndTime().Minutes;
             numInterval.Value = item.Interval;
+            numMaxWidth.Value = item.MaxWidth;
+            chkRandomImage.Checked = item.UseRandomImage;
+            txtListdescription.Text = item.Description;
 
 
             foreach (Control c in grpListsettings.Controls)
             {
-                if (c.GetType() == typeof(System.Windows.Forms.Label))
+                if (c.GetType() == typeof(Label))
                 {
                     continue;
                 }
 
                 if (c.GetType() == typeof(System.Windows.Forms.CheckBox))
                 {
-                    ((System.Windows.Forms.CheckBox)c).CheckedChanged += new System.EventHandler(this.SetListsettings);
+                    ((System.Windows.Forms.CheckBox)c).CheckedChanged += new EventHandler(this.SetListsettings);
                     continue;
                 }
-                if (c.GetType() == typeof(System.Windows.Forms.TextBox))
+                if (c.GetType() == typeof(TextBox))
                 {
-                    ((System.Windows.Forms.TextBox)c).TextChanged += new System.EventHandler(this.SetListsettings);
+                    ((TextBox)c).TextChanged += new EventHandler(this.SetListsettings);
                     continue;
                 }
-                if (c.GetType() == typeof(System.Windows.Forms.NumericUpDown))
+                if (c.GetType() == typeof(NumericUpDown))
                 {
-                    ((System.Windows.Forms.NumericUpDown)c).ValueChanged += new System.EventHandler(this.SetListsettings);
+                    ((NumericUpDown)c).ValueChanged += new EventHandler(this.SetListsettings);
                     continue;
                 }
             }
@@ -677,6 +743,9 @@ namespace Simple_image_server
             item.SetStarttime((int)numFromHour.Value, (int)numFromMinute.Value);
             item.SetEndtime((int)numToHour.Value, (int)numToMinute.Value);
             item.Interval = (int)numInterval.Value;
+            item.MaxWidth = (int)numMaxWidth.Value;
+            item.UseRandomImage = chkRandomImage.Checked;
+            item.Description = txtListdescription.Text;
 
             ((ListboxItemWrapper)lbLists.SelectedItem).Name = item.Name;
             // weird hack to update the listbox item..
@@ -693,7 +762,7 @@ namespace Simple_image_server
                 return;
             }
 
-            var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Model.Imagelist)((Simple_image_server.Model.ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+            var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
 
             openFileDialog1.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             openFileDialog1.Multiselect = true;
@@ -710,7 +779,7 @@ namespace Simple_image_server
                             continue;
                         }
 
-                        var image = new Model.ImageElement
+                        var image = new ImageElement
                         {
                             Id = Guid.NewGuid(),
                             Path = file
@@ -736,7 +805,7 @@ namespace Simple_image_server
                 return;
             }
 
-            pbPreview.ImageLocation = ((Simple_image_server.Model.ListboxItemWrapper)((ListBox)sender).SelectedItem).Name;
+            pbPreview.ImageLocation = ((ListboxItemWrapper)((ListBox)sender).SelectedItem).Name;
         }
 
         private void DarkMode_CheckedChanged(object sender, EventArgs e)
@@ -769,14 +838,34 @@ namespace Simple_image_server
             }
             var item = (ListboxItemWrapper)lbLists.Items[e.Index];
             Color foreColor = this.ForeColor;
+
+            var txt = $"{item.Name}";
+            if (string.IsNullOrEmpty(((Imagelist)item.Tag).Description) == false)
+            {
+                txt += $" [{((Imagelist)item.Tag).Description}]";
+            }
             if (((Imagelist)item.Tag).IsActive == false)
             {
+                foreColor = Color.Orange;
+                txt += " (inactive)";
+            }
+
+            // check other rules..
+            if (((Imagelist)item.Tag).ActiveDays.HasFlag((OpenDays)(1 << (int)DateTime.Now.DayOfWeek)) == false)
+            {
+                txt += " (inactive because weekday)";
                 foreColor = Color.Yellow;
             }
+            if (((Imagelist)item.Tag).IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute) == false)
+            {
+                txt += " (inactive because time of day)";
+                foreColor = Color.Yellow;
+            }
+
             e.DrawBackground();
             TextRenderer.DrawText(
                 e.Graphics,
-                item.Name,
+                txt,
                 lbLists.Font,
                 e.Bounds,
                 foreColor,
@@ -788,6 +877,121 @@ namespace Simple_image_server
         private void btnSaveSettingsNow_Click(object sender, EventArgs e)
         {
             SaveSettings();
+        }
+
+        private void btnOpenSettingsfolder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var settingsFolder = Path.GetDirectoryName(_settingsPath);
+                if (!Directory.Exists(Path.GetDirectoryName(settingsFolder)))
+                {
+                    MessageBox.Show("Settings folder not found", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo(settingsFolder)
+                {
+                    UseShellExecute = true,
+                    Verb = "explore"
+                };
+
+                Process.Start(startInfo);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Settings folder could not be opened", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnMoveListUp_Click(object sender, EventArgs e)
+        {
+            MoveListIndex(-1);
+        }
+
+        private void MoveListIndex(int indexChange)
+        {
+            if (lbLists.SelectedItem == null)
+            {
+                return;
+            }
+            var list = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+            var index = _settings.Lists.IndexOf(list);
+
+            var newIndex = index + indexChange;
+            if (newIndex < 0 || newIndex >= _settings.Lists.Count)
+            {
+                return;
+            }
+
+            _settings.Lists.RemoveAt(index);
+            _settings.Lists.Insert(newIndex, list);
+            LoadLists();
+            lbLists.SelectedIndex = newIndex;
+        }
+
+        private void btnMoveListDown_Click(object sender, EventArgs e)
+        {
+            MoveListIndex(1);
+        }
+
+        private void btnRemoveImage_Click(object sender, EventArgs e)
+        {
+            if(lbElementsInList.SelectedItem == null || lbLists.SelectedItem == null)
+            {
+                return;
+            }
+
+            var selectedList = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+
+            var imgId = ((ImageElement)((ListboxItemWrapper)lbElementsInList.SelectedItem).Tag).Id;
+            var img = selectedList.Images.FirstOrDefault(a => a.Id == imgId);
+            var newIndex = selectedList.Images.IndexOf(img);
+            selectedList.Images.Remove(img);
+            lbLists_SelectedIndexChanged(lbLists, e);
+            if(newIndex >= selectedList.Images.Count)
+            {
+                newIndex = selectedList.Images.Count - 1;
+            }
+            if (newIndex < 0)
+            {
+                pbPreview.ImageLocation = "";
+            }
+            else
+            {
+                lbElementsInList.SelectedIndex = newIndex;
+            }
+        }
+
+        private void btnDeleteSelectedList_Click(object sender, EventArgs e)
+        {
+            if (lbLists.SelectedItem == null)
+            {
+                return;
+            }
+
+            var selectedList = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+
+            if(selectedList == null)
+            {
+                return;
+            }
+
+            if(selectedList.Images.Count > 0)
+            {
+                var result = MessageBox.Show("This list has images in it. Are you sure you want to delete it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
+            var index = _settings.Lists.IndexOf(selectedList);
+            _settings.Lists.RemoveAt(index);
+            LoadLists();
+
+            lbElementsInList.Items.Clear();
+            pbPreview.ImageLocation = "";
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>[TITLE]</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+        }
+
+        img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid #fff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <img id="slideshow" src="" alt="Vandringer i billedland" />
+
+    <script>
+        const imagePath = "[URI]";
+        const imgElement = document.getElementById('slideshow');
+
+        function loadNewImage() {
+            const timestamp = new Date().getTime();
+            imgElement.src = imagePath + '?t=' + timestamp;
+        }
+        loadNewImage();
+        setInterval(loadNewImage, [INTERVAL]);
+    </script>
+
+</body>
+</html>

@@ -18,6 +18,9 @@ namespace Simple_image_server.Model
         public int Starttime { get; set; }
         public int Endtime { get; set; }
         public int Interval { get; set; }
+        public int MaxWidth { get; set; }
+        public bool UseRandomImage { get; set; }
+        public string Description { get; set; }
 
         public void SetStarttime(int hours, int minutes)
         {
@@ -52,6 +55,7 @@ namespace Simple_image_server.Model
             Images = new List<ImageElement>();
             Id = Guid.NewGuid();
             Interval = 5;
+            MaxWidth = 1920;
             SetEndtime(23, 59);
         }
     }
