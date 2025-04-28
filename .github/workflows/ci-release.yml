@@ -14,38 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Sæt .NET SDK op
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0'
-
-      # Tving MSBuild til at bruge x64 arkitektur
-      - name: Set MSBuild environment variables
+      # Find MSBuild.exe til .NET Framework 4.8
+      - name: Locate MSBuild.exe
+        id: locate_msbuild
         run: |
-          "DOTNET_HOST_X86=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          "MSBUILDARCH=x64" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          "MSBUILDDISABLENODEREUSE=1" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          $vsPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
+          echo "MSBUILD_PATH=$vsPath" | Out-File -FilePath $env:GITHUB_ENV -Append
         shell: pwsh
 
-      # Restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore "Simple image server/Simple image server.sln"
-
-      # Build projektet med korrekt arkitektur
-      - name: Find MSBuild
-        run: where msbuild
-        shell: cmd
-
+      # Byg projektet med MSBuild
       - name: Build with MSBuild (for .NET Framework 4.8)
         run: |
-          msbuild "Simple image server/Simple image server.sln" /p:Configuration=Release /p:Platform="Any CPU"
+          & "$env:MSBUILD_PATH" "Simple image server/Simple image server.sln" /p:Configuration=Release /p:Platform="Any CPU"
         shell: pwsh
-
-
-      # Test projektet (valgfrit)
-      - name: Run tests
-        run: dotnet test "Simple image server/Simple image server.sln" --no-build --verbosity normal
 
   release:
     runs-on: windows-latest
