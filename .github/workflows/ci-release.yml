@@ -50,13 +50,12 @@ jobs:
           name: build-output
           path: build
 
-      - name: Create release zip
+      - name: Create release zip (only exe and dll)
         run: |
           $tag = "${{ github.ref_name }}"
-          Compress-Archive -Path build\* -DestinationPath "SimpleImageServer-$tag.zip"
+          Compress-Archive -Path build/**/*.exe,build/**/*.dll -DestinationPath "SimpleImageServer-$tag.zip"
         shell: pwsh
 
-      # 🧙‍♂️ Generer changelog baseret på commits
       - name: Generate Release Changelog
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v4
@@ -66,13 +65,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 🎯 Opret GitHub Release med changelog
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             SimpleImageServer-*.zip
           name: Release ${{ github.ref_name }}
-          body: ${{ steps.changelog.outputs.changelog }}
+          body: |
+            🎉 This is the release for version ${{ github.ref_name }}!
+
+            What's Changed:
+            ${{ steps.changelog.outputs.changelog }}
+
+            ---
+            🛡️ **Note:**  
+            Windows Defender may display a warning when downloading newly built applications that are unsigned.  
+            This build is created automatically by GitHub Actions and is safe to use.  
+            Signing certificates will be considered for future versions.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
