@@ -23,9 +23,9 @@ jobs:
       # Tving MSBuild til at bruge x64 arkitektur
       - name: Set MSBuild environment variables
         run: |
-          echo "DOTNET_HOST_X86=false" >> $env:GITHUB_ENV
-          echo "MSBUILDARCH=x64" >> $env:GITHUB_ENV
-          echo "MSBUILDDISABLENODEREUSE=1" >> $env:GITHUB_ENV
+          "DOTNET_HOST_X86=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "MSBUILDARCH=x64" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "MSBUILDDISABLENODEREUSE=1" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
         shell: pwsh
 
       # Restore dependencies
