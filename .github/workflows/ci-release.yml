@@ -50,10 +50,14 @@ jobs:
           name: build-output
           path: build
 
-      - name: Create release zip (only exe and dll)
+      - name: Create release zip (robust)
         run: |
           $tag = "${{ github.ref_name }}"
-          Compress-Archive -Path build/**/*.exe,build/**/*.dll -DestinationPath "SimpleImageServer-$tag.zip"
+          mkdir temp
+          Copy-Item -Path build/**/* -Destination temp/ -Recurse
+          Remove-Item -Path temp/**/*.pdb -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path temp/**/*.xml -Force -ErrorAction SilentlyContinue
+          Compress-Archive -Path temp\* -DestinationPath "SimpleImageServer-$tag.zip"
         shell: pwsh
 
       - name: Generate Release Changelog
