@@ -10,11 +10,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # Tjek koden ud fra repo'et
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Find MSBuild.exe til .NET Framework 4.8
       - name: Locate MSBuild.exe
         id: locate_msbuild
         run: |
@@ -22,16 +20,22 @@ jobs:
           echo "MSBUILD_PATH=$vsPath" | Out-File -FilePath $env:GITHUB_ENV -Append
         shell: pwsh
 
-      # Restore NuGet packages
       - name: Restore NuGet packages
         run: nuget restore "Simple image server/Simple image server.sln"
         shell: pwsh
 
-      # Byg projektet med MSBuild
       - name: Build with MSBuild (for .NET Framework 4.8)
         run: |
           & "$env:MSBUILD_PATH" "Simple image server/Simple image server.sln" /p:Configuration=Release /p:Platform="Any CPU"
         shell: pwsh
+
+      # 🏹 Upload build-artifacts
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            **/bin/Release/**
 
   release:
     runs-on: windows-latest
@@ -41,11 +45,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Opret release
+      # 🏹 Download artifacts
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: build
+
+      # 🎯 Create GitHub Release with artifacts
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            **/bin/Release/**
+          files: build/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
