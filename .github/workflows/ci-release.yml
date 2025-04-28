@@ -46,6 +46,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            Simple image server/**/bin/Release/**/* # Upload build-artifakter
+            **/bin/Release/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
