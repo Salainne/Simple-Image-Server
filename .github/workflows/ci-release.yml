@@ -20,24 +20,20 @@ jobs:
         with:
           dotnet-version: '7.0' # Angiv den version af .NET, du bruger
 
-      # Skift til den korrekte mappe (opdater 'src/' til din faktiske sti)
-      - name: Change to project directory
-        run: cd src
-
       # Restore dependencies
       - name: Restore dependencies
-        run: dotnet restore src/ # Angiv stien til projektfilen
+        run: dotnet restore "Simple image server/Simple image server.sln"
 
       # Build projektet
       - name: Build
-        run: dotnet build src/ --configuration Release --no-restore
+        run: dotnet build "Simple image server/Simple image server.sln" --configuration Release --no-restore
 
-      # Test projektet (valgfrit, hvis du har tests)
+      # Test projektet (valgfrit)
       - name: Run tests
-        run: dotnet test src/ --no-build --verbosity normal
+        run: dotnet test "Simple image server/Simple image server.sln" --no-build --verbosity normal
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
 
     steps:
@@ -49,6 +45,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            src/**/bin/Release/**/* # Upload build-artifakter
+            Simple image server/**/bin/Release/**/* # Upload build-artifakter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
