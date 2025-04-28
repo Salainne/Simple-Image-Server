@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build, Sign and Release
 
 on:
   push:
@@ -50,7 +50,22 @@ jobs:
           name: build-output
           path: build
 
-      - name: Create release zip (robust)
+      # 🧙‍♂️ Genskab .pfx certifikat fra Secret
+      - name: Recreate .pfx Certificate
+        run: |
+          echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
+        shell: bash
+
+      # 🧙‍♂️ Signer alle .exe og .dll
+      - name: Sign binaries
+        run: |
+          $files = Get-ChildItem -Path build -Recurse -Include *.exe, *.dll
+          foreach ($file in $files) {
+            & "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /f signing-cert.pfx /p "${{ secrets.SIGN_PASSWORD }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 "$($file.FullName)"
+          }
+        shell: pwsh
+
+      - name: Create release zip
         run: |
           $tag = "${{ github.ref_name }}"
           mkdir temp
@@ -83,8 +98,7 @@ jobs:
 
             ---
             🛡️ **Note:**  
-            Windows Defender may display a warning when downloading newly built applications that are unsigned.  
-            This build is created automatically by GitHub Actions and is safe to use.  
-            Signing certificates will be considered for future versions.
+            This build is automatically signed and timestamped.  
+            Windows Defender warnings should no longer appear after trust propagation.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
