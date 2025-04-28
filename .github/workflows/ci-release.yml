@@ -33,8 +33,15 @@ jobs:
         run: dotnet restore "Simple image server/Simple image server.sln"
 
       # Build projektet med korrekt arkitektur
-      - name: Build
-        run: dotnet build "Simple image server/Simple image server.sln" --configuration Release --no-restore /p:Platform="Any CPU"
+      - name: Find MSBuild
+        run: where msbuild
+        shell: cmd
+
+      - name: Build with MSBuild (for .NET Framework 4.8)
+        run: |
+          msbuild "Simple image server/Simple image server.sln" /p:Configuration=Release /p:Platform="Any CPU"
+        shell: pwsh
+
 
       # Test projektet (valgfrit)
       - name: Run tests
