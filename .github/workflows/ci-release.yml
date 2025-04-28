@@ -29,7 +29,6 @@ jobs:
           & "$env:MSBUILD_PATH" "Simple image server/Simple image server.sln" /p:Configuration=Release /p:Platform="Any CPU"
         shell: pwsh
 
-      # 🏹 Upload build-artifacts
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -45,17 +44,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 🏹 Download artifacts
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-output
           path: build
 
-      # 🎯 Create GitHub Release with artifacts
-      - name: Create Release
+      - name: Create release zip
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Compress-Archive -Path build\* -DestinationPath "SimpleImageServer-$tag.zip"
+        shell: pwsh
+
+      # 🧙‍♂️ Generer changelog baseret på commits
+      - name: Generate Release Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: ""
+          failOnError: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 🎯 Opret GitHub Release med changelog
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/**
+          files: |
+            SimpleImageServer-*.zip
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changelog }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
