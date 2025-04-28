@@ -3,14 +3,14 @@ name: Build and Release
 on:
   push:
     branches:
-      - main  # Kør workflow, når der pushes til main-branch
+      - main
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      # Tjekk koden ud fra repo'et
+      # Tjek koden ud fra repo'et
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -20,23 +20,27 @@ jobs:
         with:
           dotnet-version: '7.0' # Angiv den version af .NET, du bruger
 
+      # Skift til den korrekte mappe (opdater 'src/' til din faktiske sti)
+      - name: Change to project directory
+        run: cd src
+
       # Restore dependencies
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore src/ # Angiv stien til projektfilen
 
       # Build projektet
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build src/ --configuration Release --no-restore
 
       # Test projektet (valgfrit, hvis du har tests)
       - name: Run tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test src/ --no-build --verbosity normal
 
   release:
     runs-on: ubuntu-latest
     needs: build
+
     steps:
-      # Tjekk koden ud fra repo'et
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -45,6 +49,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            **/bin/Release/**/* # Upload build-artifakter
+            src/**/bin/Release/**/* # Upload build-artifakter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
