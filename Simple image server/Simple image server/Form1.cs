@@ -1032,5 +1032,50 @@ namespace Simple_image_server
             lbElementsInList.Items.Clear();
             pbPreview.ImageLocation = "";
         }
+
+        private void btnDuplicateList_Click(object sender, EventArgs e)
+        {
+            if (lbLists.SelectedItem == null)
+            {
+                return;
+            }
+
+            var selectedList = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+
+            if (selectedList == null)
+            {
+                return;
+            }
+
+            var newList = new Imagelist
+            {
+                Id = Guid.NewGuid(),
+                Name = selectedList.Name,
+                Description = selectedList.Description + " - Copy",
+                IsActive = selectedList.IsActive,
+                ActiveDays = selectedList.ActiveDays,
+                Starttime = selectedList.Starttime,
+                Endtime = selectedList.Endtime,
+                Interval = selectedList.Interval,
+                MaxWidth = selectedList.MaxWidth,
+                UseRandomImage = selectedList.UseRandomImage,
+            };
+            foreach (var image in selectedList.Images)
+            {
+                var newImage = new ImageElement
+                {
+                    Id = Guid.NewGuid(),
+                    Path = image.Path
+                };
+                newList.Images.Add(newImage);
+            }
+            _settings.Lists.Add(newList);
+            LoadLists();
+            lbLists.SelectedIndex = lbLists.Items.Count - 1;
+            lbLists_SelectedIndexChanged(lbLists, e);
+            pbPreview.ImageLocation = "";
+            txtListname.Focus();
+            txtListname.SelectAll();
+        }
     }
 }

@@ -34,6 +34,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbLanguage = new System.Windows.Forms.ComboBox();
             this.btnOpenSettingsfolder = new System.Windows.Forms.Button();
             this.btnSaveSettingsNow = new System.Windows.Forms.Button();
             this.DarkMode = new System.Windows.Forms.CheckBox();
@@ -44,6 +45,7 @@
             this.txtPort = new System.Windows.Forms.TextBox();
             this.btnServertoggle = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnDuplicateList = new System.Windows.Forms.Button();
             this.btnDeleteSelectedList = new System.Windows.Forms.Button();
             this.btnMoveListDown = new System.Windows.Forms.Button();
             this.btnMoveListUp = new System.Windows.Forms.Button();
@@ -83,7 +85,6 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.cmbLanguage = new System.Windows.Forms.ComboBox();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -132,6 +133,15 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // cmbLanguage
+            // 
+            this.cmbLanguage.FormattingEnabled = true;
+            this.cmbLanguage.Items.AddRange(new object[] {
+            resources.GetString("cmbLanguage.Items"),
+            resources.GetString("cmbLanguage.Items1")});
+            resources.ApplyResources(this.cmbLanguage, "cmbLanguage");
+            this.cmbLanguage.Name = "cmbLanguage";
             // 
             // btnOpenSettingsfolder
             // 
@@ -193,6 +203,7 @@
             // groupBox2
             // 
             resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Controls.Add(this.btnDuplicateList);
             this.groupBox2.Controls.Add(this.btnDeleteSelectedList);
             this.groupBox2.Controls.Add(this.btnMoveListDown);
             this.groupBox2.Controls.Add(this.btnMoveListUp);
@@ -201,6 +212,13 @@
             this.groupBox2.Controls.Add(this.btnAddNewList);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
+            // 
+            // btnDuplicateList
+            // 
+            resources.ApplyResources(this.btnDuplicateList, "btnDuplicateList");
+            this.btnDuplicateList.Name = "btnDuplicateList";
+            this.btnDuplicateList.UseVisualStyleBackColor = true;
+            this.btnDuplicateList.Click += new System.EventHandler(this.btnDuplicateList_Click);
             // 
             // btnDeleteSelectedList
             // 
@@ -516,15 +534,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // cmbLanguage
-            // 
-            this.cmbLanguage.FormattingEnabled = true;
-            this.cmbLanguage.Items.AddRange(new object[] {
-            resources.GetString("cmbLanguage.Items"),
-            resources.GetString("cmbLanguage.Items1")});
-            resources.ApplyResources(this.cmbLanguage, "cmbLanguage");
-            this.cmbLanguage.Name = "cmbLanguage";
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -615,6 +624,7 @@
         private System.Windows.Forms.Button btnRemoveImage;
         private System.Windows.Forms.Button btnDeleteSelectedList;
         private System.Windows.Forms.ComboBox cmbLanguage;
+        private System.Windows.Forms.Button btnDuplicateList;
     }
 }
 

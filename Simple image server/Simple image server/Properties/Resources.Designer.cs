@@ -88,6 +88,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate list.
+        /// </summary>
+        internal static string btnDuplicateList {
+            get {
+                return ResourceManager.GetString("btnDuplicateList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ↓.
         /// </summary>
         internal static string btnMoveListDown {

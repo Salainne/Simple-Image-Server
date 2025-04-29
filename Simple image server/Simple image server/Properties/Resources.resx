@@ -306,4 +306,7 @@
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="btnDuplicateList" xml:space="preserve">
+    <value>Duplicate list</value>
+  </data>
 </root>
