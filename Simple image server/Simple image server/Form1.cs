@@ -363,6 +363,7 @@ namespace Simple_image_server
                     else
                     {
                         byte[] errorMessage = Encoding.UTF8.GetBytes(statusmessage);
+                        response.ContentType = "text/plain";
                         using (var outputStream = response.OutputStream)
                         {
                             await outputStream.WriteAsync(errorMessage, 0, errorMessage.Length);
