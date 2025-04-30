@@ -80,8 +80,9 @@ namespace Simple_image_server
 
             // Apply localization to all controls
             ResourceHelper.ApplyResources(this);
+            SetAutostartText();
 
-            if(ResourceHelper.MissingResourceentries.ToString() != string.Empty)
+            if (ResourceHelper.MissingResourceentries.ToString() != string.Empty)
             {
                 Log(ResourceHelper.MissingResourceentries.ToString(), logLevel);
             }
