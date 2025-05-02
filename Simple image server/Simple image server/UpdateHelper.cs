@@ -17,7 +17,6 @@ namespace Simple_image_server
         {
             if (!File.Exists(autoupdaterPath))
             {
-                Console.WriteLine("Autoupdater not found.");
                 return false;
             }
 
@@ -42,6 +41,24 @@ namespace Simple_image_server
             LastFoundVersion = TryGetVersionFromJson();
 
             return check.ExitCode == 1;
+        }
+
+        public static void UpdateNow()
+        {
+            if (!File.Exists(autoupdaterPath))
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = autoupdaterPath,
+                Arguments = "updatenow",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.GetDirectoryName(autoupdaterPath)
+            });
+            Environment.Exit(0);
         }
 
         private static string TryGetVersionFromJson()

@@ -212,16 +212,16 @@ namespace Simple_image_server
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            //// check for updates..
-            //if (UpdateHelper.CheckForUpdate())
-            //{
-            //    var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    if (result == DialogResult.Yes)
-            //    {
-            //        //Process.Start(UpdateHelper.autoupdaterPath, "update");
-            //        return;
-            //    }
-            //}
+            // check for updates..
+            if (UpdateHelper.CheckForUpdate())
+            {
+                var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    UpdateHelper.UpdateNow();
+                    return;
+                }
+            }
 
             if (_settings.Autostart)
             {
@@ -311,6 +311,7 @@ namespace Simple_image_server
             catch(HttpListenerException ex)
             {
                 isRunning = false;
+                Invoke(new Action(() => notifyIcon1_MouseClick(this, null)));
                 Invoke(new Action(() => btnServertoggle.Text = Resources.StartServer));
                 
                 if (ex.NativeErrorCode != 995)
