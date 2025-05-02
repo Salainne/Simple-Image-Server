@@ -13,6 +13,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Update AssemblyInfo versions
+        run: |
+          $tag = "${{ github.ref_name }}"
+          
+          # Fjern evt. 'v' foran og split versionstal
+          $version = $tag -replace '^v', ''
+          $parts = $version.Split('.')
+          while ($parts.Count -lt 4) { $parts += '0' }
+          $finalVersion = ($parts[0..3] -join '.')
+        
+          Write-Output "Using version: $finalVersion"
+        
+          # Find og opdater alle AssemblyInfo.cs filer
+          $files = Get-ChildItem -Path . -Recurse -Include AssemblyInfo.cs
+          foreach ($file in $files) {
+            (Get-Content $file.FullName) |
+              ForEach-Object {
+                $_ -replace '^\[assembly: AssemblyVersion\(".*?"\)\]', "[assembly: AssemblyVersion(`"$finalVersion`")]"
+              } |
+              ForEach-Object {
+                $_ -replace '^\[assembly: AssemblyFileVersion\(".*?"\)\]', "[assembly: AssemblyFileVersion(`"$finalVersion`")]"
+              } |
+              Set-Content $file.FullName
+            Write-Output "Updated: $($file.FullName)"
+          }
+        shell: pwsh
+
+
       - name: Locate MSBuild.exe
         id: locate_msbuild
         run: |
