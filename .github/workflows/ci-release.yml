@@ -96,6 +96,7 @@ jobs:
           Copy-Item -Path build/**/* -Destination temp/ -Recurse
           Remove-Item -Path temp/**/*.pdb -Force -ErrorAction SilentlyContinue
           Remove-Item -Path temp/**/*.xml -Force -ErrorAction SilentlyContinue
+          Copy-Item -Path build/Autoupdater/updates.json -Destination temp/Autoupdater/ -Force
           Compress-Archive -Path temp\* -DestinationPath "SimpleImageServer-$tag.zip"
         shell: pwsh
 
