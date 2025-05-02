@@ -160,6 +160,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        internal static string CheckForUpdates {
+            get {
+                return ResourceManager.GetString("CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow remoteaccess.
         /// </summary>
         internal static string chkAllowremoteAccess {
@@ -556,11 +565,20 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version {0} availeble.
+        ///   Looks up a localized string similar to Version {0} available.
         /// </summary>
         internal static string NewVersionAvailable {
             get {
                 return ResourceManager.GetString("NewVersionAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No new version available.
+        /// </summary>
+        internal static string NoNewVersionAvailable {
+            get {
+                return ResourceManager.GetString("NoNewVersionAvailable", resourceCulture);
             }
         }
         

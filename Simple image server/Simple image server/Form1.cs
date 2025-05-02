@@ -227,13 +227,39 @@ namespace Simple_image_server
             }
 
             statusStrip1.Items.Add(new ToolStripStatusLabel(string.Format(Resources.CurrentVerionText, Assembly.GetExecutingAssembly().GetName().Version.ToString())));
-            statusStrip1.Items.Add(new ToolStripButton(string.Format(Resources.NewVersionAvailable+ " "+ Resources.ClickToUpdateNow, UpdateHelper.LastFoundVersion), null, (s, ee) => { UpdateHelper.UpdateNow(); }, "UpdateNowButton") { Visible = UpdateHelper.LastFoundVersion != "Unknown" });
+
+            SetStatusStripButtons();
 
             if (_settings.Autostart)
             {
                 btnServertoggle_Click(sender, e);
                 this.Close();
             }
+        }
+
+        private void SetStatusStripButtons()
+        {
+            var tmp = statusStrip1.Items[0];
+            statusStrip1.Items.Clear();
+            statusStrip1.Items.Add(tmp);
+
+            statusStrip1.Items.Add(new ToolStripButton(string.Format(Resources.NewVersionAvailable + " " + Resources.ClickToUpdateNow, UpdateHelper.LastFoundVersion), null, (s, ee) => { UpdateHelper.UpdateNow(); }, "UpdateNowButton") { Visible = UpdateHelper.LastFoundVersion != "Unknown" });
+            statusStrip1.Items.Add(new ToolStripButton(Resources.CheckForUpdates, null, (s, ee) => {
+                if (UpdateHelper.CheckForUpdate())
+                {
+                    var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        UpdateHelper.UpdateNow();
+                        return;
+                    }
+                    SetStatusStripButtons();
+                }
+                else
+                {
+                    MessageBox.Show(Resources.NoNewVersionAvailable, Resources.Form1, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }, "UpdateNowButton") { Visible = true });
         }
 
         private void LoadSettings()

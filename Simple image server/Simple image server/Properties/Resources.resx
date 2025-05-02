@@ -313,12 +313,18 @@
     <value>Update available</value>
   </data>
   <data name="NewVersionAvailable" xml:space="preserve">
-    <value>Version {0} availeble</value>
+    <value>Version {0} available</value>
   </data>
   <data name="CurrentVerionText" xml:space="preserve">
     <value>Current version {0}</value>
   </data>
   <data name="ClickToUpdateNow" xml:space="preserve">
     <value>Click to update now</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="NoNewVersionAvailable" xml:space="preserve">
+    <value>No new version available</value>
   </data>
 </root>

@@ -315,4 +315,10 @@
   <data name="ClickToUpdateNow" xml:space="preserve">
     <value>Klik for at opdatere nu</value>
   </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Tjek for opdateringer</value>
+  </data>
+  <data name="NoNewVersionAvailable" xml:space="preserve">
+    <value>Ingen ny version tilgængelig</value>
+  </data>
 </root>
