@@ -212,7 +212,7 @@ namespace Simple_image_server
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            // check for updates..
+            //// check for updates..
             //if (UpdateHelper.CheckForUpdate())
             //{
             //    var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
