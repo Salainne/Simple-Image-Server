@@ -52,21 +52,26 @@ jobs:
 
       - name: Generate updates.json
         run: |
-            $tag = "${{ github.ref_name }}"
-            $updatesJson = @"
-            {
-              "version": "$tag",
-              "sources": [
-                {
-                  "type": "github",
-                  "repo": "${{ github.repository }}",
-                  "assetMatch": ".*\\.zip$"
-                }
-              ]
-            }
-            "@
-            $updatesJson | Set-Content -Encoding UTF8 build/updates.json
+          $tag = "${{ github.ref_name }}"
+          $updatesJson = @"
+          {
+            "version": "$tag",
+            "sources": [
+              {
+                "type": "github",
+                "repo": "${{ github.repository }}",
+                "assetMatch": ".*\\.zip$"
+              }
+            ]
+          }
+          "@
+              $autoupdaterPath = "build/Autoupdater"
+              if (!(Test-Path $autoupdaterPath)) {
+                New-Item -Path $autoupdaterPath -ItemType Directory
+              }
+              $updatesJson | Set-Content -Encoding UTF8 "$autoupdaterPath/updates.json"
         shell: pwsh
+
 
 
       # 🧙‍♂️ Genskab .pfx certifikat fra Secret
@@ -91,7 +96,6 @@ jobs:
           Copy-Item -Path build/**/* -Destination temp/ -Recurse
           Remove-Item -Path temp/**/*.pdb -Force -ErrorAction SilentlyContinue
           Remove-Item -Path temp/**/*.xml -Force -ErrorAction SilentlyContinue
-          Copy-Item -Path build/updates.json -Destination temp/updates.json
           Compress-Archive -Path temp\* -DestinationPath "SimpleImageServer-$tag.zip"
         shell: pwsh
 
