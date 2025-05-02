@@ -206,11 +206,23 @@ namespace Simple_image_server
 
             chkAllowremoteAccess.Checked = _settings.AllowRemoteAccess;
             txtPort.Text = _settings.Port.ToString();
-            chkAutostart.Checked = _settings.Autostart;            
+            chkAutostart.Checked = _settings.Autostart;
+
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
+            // check for updates..
+            //if (UpdateHelper.CheckForUpdate())
+            //{
+            //    var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        //Process.Start(UpdateHelper.autoupdaterPath, "update");
+            //        return;
+            //    }
+            //}
+
             if (_settings.Autostart)
             {
                 btnServertoggle_Click(sender, e);

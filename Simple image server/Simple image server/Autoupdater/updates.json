@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "sources": [
+    {
+      "type": "github",
+      "repo": "Salainne/Simple-Image-Server",
+      "assetMatch": ".*\\.zip$"
+    }
+  ]
+}

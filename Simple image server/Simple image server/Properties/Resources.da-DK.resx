@@ -303,4 +303,10 @@
   <data name="btnDuplicateList" xml:space="preserve">
     <value>Dupliker liste</value>
   </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Ny version tilgængelig</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Version {0} tilgængelig</value>
+  </data>
 </root>
