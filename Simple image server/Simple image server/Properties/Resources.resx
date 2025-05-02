@@ -315,4 +315,10 @@
   <data name="NewVersionAvailable" xml:space="preserve">
     <value>Version {0} availeble</value>
   </data>
+  <data name="CurrentVerionText" xml:space="preserve">
+    <value>Current version {0}</value>
+  </data>
+  <data name="ClickToUpdateNow" xml:space="preserve">
+    <value>Click to update now</value>
+  </data>
 </root>

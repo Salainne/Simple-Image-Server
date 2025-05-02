@@ -259,11 +259,29 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click to update now.
+        /// </summary>
+        internal static string ClickToUpdateNow {
+            get {
+                return ResourceManager.GetString("ClickToUpdateNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client dropped connection {0}.
         /// </summary>
         internal static string ClientDroppedConnection {
             get {
                 return ResourceManager.GetString("ClientDroppedConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current version {0}.
+        /// </summary>
+        internal static string CurrentVerionText {
+            get {
+                return ResourceManager.GetString("CurrentVerionText", resourceCulture);
             }
         }
         

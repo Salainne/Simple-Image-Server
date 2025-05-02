@@ -215,13 +215,19 @@ namespace Simple_image_server
             // check for updates..
             if (UpdateHelper.CheckForUpdate())
             {
-                var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                if (_settings.ShowUpdatenowDialogOnAppStart)
                 {
-                    UpdateHelper.UpdateNow();
-                    return;
+                    var result = MessageBox.Show(string.Format(Resources.NewVersionAvailable, UpdateHelper.LastFoundVersion), Resources.Form1, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        UpdateHelper.UpdateNow();
+                        return;
+                    }
                 }
             }
+
+            statusStrip1.Items.Add(new ToolStripStatusLabel(string.Format(Resources.CurrentVerionText, Assembly.GetExecutingAssembly().GetName().Version.ToString())));
+            statusStrip1.Items.Add(new ToolStripButton(string.Format(Resources.NewVersionAvailable+ " "+ Resources.ClickToUpdateNow, UpdateHelper.LastFoundVersion), null, (s, ee) => { UpdateHelper.UpdateNow(); }, "UpdateNowButton") { Visible = UpdateHelper.LastFoundVersion != "Unknown" });
 
             if (_settings.Autostart)
             {

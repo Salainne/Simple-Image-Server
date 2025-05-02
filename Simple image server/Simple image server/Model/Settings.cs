@@ -18,6 +18,8 @@ namespace Simple_image_server.Model
         public List<Model.Imagelist> Lists { get; set; }
         public string CultureInfoName { get; set; }
 
+        public bool ShowUpdatenowDialogOnAppStart { get; set; }
+
         public Settings()
         {
             Lists = new List<Model.Imagelist>();
