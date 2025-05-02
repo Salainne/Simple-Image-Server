@@ -85,20 +85,19 @@ jobs:
         run: |
           $tag = "${{ github.ref_name }}"
           $repo = "${{ github.repository }}"
-          $updatesJson = @"
-  {
-    "version": "$tag",
-    "sources": [
-      {
-        "type": "github",
-        "repo": "$repo",
-        "assetMatch": ".*\\.zip$"
-      }
-    ]
-  }
-  "@
           New-Item -Path dist/Autoupdater -ItemType Directory -Force
-          $updatesJson | Set-Content -Encoding UTF8 "dist/Autoupdater/updates.json"
+          @(
+            "{"
+            '  "version": "' + $tag + '",'
+            '  "sources": ['
+            "    {"
+            '      "type": "github",'
+            '      "repo": "' + $repo + '",'
+            '      "assetMatch": ".*\\.zip$"'
+            "    }"
+            "  ]"
+            "}"
+          ) | Out-File -FilePath "dist/Autoupdater/updates.json" -Encoding utf8
         shell: pwsh
   
       # 🗜️ Pak alt fra dist/ i zip
