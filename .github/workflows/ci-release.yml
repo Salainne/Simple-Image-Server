@@ -39,62 +39,75 @@ jobs:
   release:
     runs-on: windows-latest
     needs: build
-
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+  
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-output
           path: build
-
-      - name: Generate updates.json
+  
+      # 🧹 Find og flyt build-output ét niveau op (fjerner bin/Release/... rod)
+      - name: Flatten build folder
         run: |
-            $tag = "${{ github.ref_name }}"
-            $updatesJson = @"
-            {
-              "version": "$tag",
-              "sources": [
-                {
-                  "type": "github",
-                  "repo": "${{ github.repository }}",
-                  "assetMatch": ".*\\.zip$"
-                }
-              ]
-            }
-            "@
-            $updatesJson | Set-Content -Encoding UTF8 build/updates.json
+          $sourceRoot = Get-ChildItem -Path build -Recurse -Directory | Where-Object { Test-Path "$($_.FullName)\Simple image server.exe" } | Select-Object -First 1
+  
+          if (-not $sourceRoot) {
+            Write-Error "Could not locate build folder containing the .exe."
+            exit 1
+          }
+  
+          New-Item -Path dist -ItemType Directory -Force
+          Copy-Item -Path "$($sourceRoot.FullName)\*" -Destination dist -Recurse -Force
+          Write-Output "Flattened from: $($sourceRoot.FullName)"
         shell: pwsh
-
-
-      # 🧙‍♂️ Genskab .pfx certifikat fra Secret
+  
+      # 🛡️ Genskab .pfx certifikat fra Secret
       - name: Recreate .pfx Certificate
         run: |
           echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
         shell: bash
-
-      # 🧙‍♂️ Signer alle .exe og .dll
+  
+      # 🔏 Signér .exe og .dll i dist
       - name: Sign binaries
         run: |
-          $files = Get-ChildItem -Path build -Recurse -Include *.exe, *.dll
+          $files = Get-ChildItem -Path dist -Recurse -Include *.exe, *.dll
           foreach ($file in $files) {
             & "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /f signing-cert.pfx /p "${{ secrets.SIGN_PASSWORD }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 "$($file.FullName)"
           }
         shell: pwsh
-
+  
+      # 🧾 Generér korrekt updates.json og placér i Autoupdater/
+      - name: Generate updates.json
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $repo = "${{ github.repository }}"
+          New-Item -Path dist/Autoupdater -ItemType Directory -Force
+          @(
+            "{"
+            '  "version": "' + $tag + '",'
+            '  "sources": ['
+            "    {"
+            '      "type": "github",'
+            '      "repo": "' + $repo + '",'
+            '      "assetMatch": ".*\\.zip$"'
+            "    }"
+            "  ]"
+            "}"
+          ) | Out-File -FilePath "dist/Autoupdater/updates.json" -Encoding utf8
+        shell: pwsh
+  
+      # 🗜️ Pak alt fra dist/ i zip
       - name: Create release zip
         run: |
           $tag = "${{ github.ref_name }}"
-          mkdir temp
-          Copy-Item -Path build/**/* -Destination temp/ -Recurse
-          Remove-Item -Path temp/**/*.pdb -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path temp/**/*.xml -Force -ErrorAction SilentlyContinue
-          Copy-Item -Path build/updates.json -Destination temp/updates.json
-          Compress-Archive -Path temp\* -DestinationPath "SimpleImageServer-$tag.zip"
+          Compress-Archive -Path dist\* -DestinationPath "SimpleImageServer-$tag.zip"
         shell: pwsh
-
+  
+      # 📝 Generér changelog
       - name: Generate Release Changelog
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v4
@@ -103,7 +116,8 @@ jobs:
           failOnError: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  
+      # 🚀 Upload release til GitHub
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -112,10 +126,10 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             🎉 This is the release for version ${{ github.ref_name }}!
-
+  
             What's Changed:
             ${{ steps.changelog.outputs.changelog }}
-
+  
             ---
             🛡️ **Note:**  
             This build is automatically signed and timestamped.  
