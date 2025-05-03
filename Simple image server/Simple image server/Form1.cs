@@ -518,7 +518,7 @@ namespace Simple_image_server
                     LastServedImageList = filePath
                 });
             }
-            
+
             var client = _clientIds[clientid];
             client.LastRequest = DateTime.Now;
 
@@ -530,7 +530,7 @@ namespace Simple_image_server
             }
 
             var list = GetFirstActivelistWithName(filePath);
-            if(list == null)
+            if (list == null)
             {
                 statuscode = 404;
                 statusmessage = Resources.ListNotFound;
@@ -543,6 +543,9 @@ namespace Simple_image_server
                 statusmessage = Resources.EmptyList;
                 return null;
             }
+
+            // When changing from one active list to another you could end in a situation where the index gives you a index out of range exception.
+            EnforceImagelistBounds(client, list);
 
             var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
 
@@ -565,20 +568,36 @@ namespace Simple_image_server
             {
                 client.LastNewImagetime = DateTime.Now;
                 client.LastServedImageId++;
-                if (client.LastServedImageId >= list.Images.Count)
-                {
-                    client.LastServedImageId = 0;
-                }
                 if (list.UseRandomImage)
                 {
                     client.LastServedImageId = _random.Next(0, list.Images.Count);
                 }
+                else
+                {
+                    EnforceImagelistBounds(client, list);
+                }
             }
-            
+
             statuscode = 200;
             statusmessage = $"OK Imageid {client.LastServedImageId}";
             return bytes;
         }
+
+        private void EnforceImagelistBounds(Client client, Imagelist list)
+        {
+            if (client.LastServedImageId >= list.Images.Count)
+            {
+                if (list.UseRandomImage)
+                {
+                    client.LastServedImageId = _random.Next(0, list.Images.Count);
+                }
+                else
+                {
+                    client.LastServedImageId = 0;
+                }
+            }
+        }
+
 
         private Imagelist GetFirstActivelistWithName(string filePath)
         {
