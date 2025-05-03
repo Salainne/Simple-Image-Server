@@ -81,6 +81,7 @@ namespace Simple_image_server
             // Apply localization to all controls
             ResourceHelper.ApplyResources(this);
             SetAutostartText();
+            SetStatusTexts();
 
             if (ResourceHelper.MissingResourceentries.ToString() != string.Empty)
             {
@@ -312,12 +313,27 @@ namespace Simple_image_server
                 serverThread.IsBackground = true;
                 isRunning = true;
                 serverThread.Start();
-                btnServertoggle.Text = Resources.StopServer;
+                SetStatusTexts();
             }
             else
             {
                 isRunning = false;
+                SetStatusTexts();
                 httpListener.Stop();
+            }
+        }
+
+        private void SetStatusTexts()
+        {
+            if (isRunning)
+            {
+                toolStripStatusLabel1.Text = string.Format(Resources.ServerRunningOnPort, _settings.Port);
+                btnServertoggle.Text = Resources.StopServer;
+            }
+            else
+            {
+                Invoke(new Action(() => notifyIcon1_MouseClick(this, null)));
+                Invoke(new Action(() => btnServertoggle.Text = Resources.StartServer));
                 btnServertoggle.Text = Resources.StartServer;
                 toolStripStatusLabel1.Text = Resources.ServerNotRunning;
             }
@@ -343,8 +359,7 @@ namespace Simple_image_server
             catch(HttpListenerException ex)
             {
                 isRunning = false;
-                Invoke(new Action(() => notifyIcon1_MouseClick(this, null)));
-                Invoke(new Action(() => btnServertoggle.Text = Resources.StartServer));
+                SetStatusTexts();
                 
                 if (ex.NativeErrorCode != 995)
                 {
