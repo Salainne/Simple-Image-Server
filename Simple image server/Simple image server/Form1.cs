@@ -441,7 +441,8 @@ namespace Simple_image_server
                 Query = query.ToString()
             };
 
-            var template = File.ReadAllText("assets/" + templatename + ".html");
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var template = File.ReadAllText(Path.Combine(basePath, "assets", templatename + ".html"));
 
             var list = GetFirstActivelistWithName(builder.Path.Replace("/", ""));
             var interval = 10000;
