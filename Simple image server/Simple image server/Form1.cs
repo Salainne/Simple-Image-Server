@@ -42,6 +42,7 @@ namespace Simple_image_server
         private string _contentLocation = Application.StartupPath + "/content";
         private string _appName = "SimpleImageServer";
         private Random _random = new Random();
+        private Guid _dragFromList;
 
         private Dictionary<string, Model.Client> _clientIds = new Dictionary<string, Model.Client>();
         
@@ -919,17 +920,6 @@ namespace Simple_image_server
             ToogleAutostart();
         }
 
-        private void lbElementsInList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(((ListBox)sender).SelectedItem == null)
-            {
-                pbPreview.ImageLocation = "";
-                return;
-            }
-
-            pbPreview.ImageLocation = ((ListboxItemWrapper)((ListBox)sender).SelectedItem).Name;
-        }
-
         private void DarkMode_CheckedChanged(object sender, EventArgs e)
         {
             _settings.DarkMode = DarkMode.Checked;
@@ -1159,6 +1149,79 @@ namespace Simple_image_server
             pbPreview.ImageLocation = "";
             txtListname.Focus();
             txtListname.SelectAll();
+        }
+
+        private void lbLists_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListboxItemWrapper)))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void lbElementsInList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ListBox)sender).SelectedItem == null)
+            {
+                pbPreview.ImageLocation = "";
+                return;
+            }
+
+            pbPreview.ImageLocation = ((ListboxItemWrapper)((ListBox)sender).SelectedItem).Name;
+        }
+
+        private void lbElementsInList_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (lbElementsInList.SelectedItem != null)
+            {
+                lbElementsInList.DoDragDrop(lbElementsInList.SelectedItem, DragDropEffects.Move);
+                _dragFromList = ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id;
+            }
+            lbElementsInList_SelectedIndexChanged(sender, null);
+        }
+
+        private void lbLists_DragDrop(object sender, DragEventArgs e)
+        {
+            var item = (ListboxItemWrapper)e.Data.GetData(typeof(ListboxItemWrapper));
+
+            var selectedList = _settings.Lists.FirstOrDefault(a => a.Id == ((Imagelist)((ListboxItemWrapper)lbLists.SelectedItem).Tag).Id);
+
+            if(selectedList.Images.Count(a => a.Id == ((ImageElement)item.Tag).Id) > 0)
+            {
+                // already in list..
+                MessageBox.Show(Resources.ImageAlreadyInList, Resources.Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var sourceList = _settings.Lists.FirstOrDefault(a => a.Id == _dragFromList);
+            if (sourceList == null)
+            {
+                MessageBox.Show(Resources.SourceListNotFound, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            sourceList.Images.Remove((ImageElement)item.Tag);
+
+            selectedList.Images.Add((ImageElement)item.Tag);
+            lbLists_SelectedIndexChanged(lbLists, e);
+        }
+
+        private void lbLists_DragOver(object sender, DragEventArgs e)
+        {
+            var point = lbLists.PointToClient(new Point(e.X, e.Y));
+            int index = lbLists.IndexFromPoint(point);
+
+            if (index >= 0 && index < lbLists.Items.Count)
+            {
+                lbLists.SelectedIndex = index;
+            }
+            else
+            {
+                lbLists.ClearSelected(); // Fjern markering hvis vi er udenfor
+            }
         }
     }
 }

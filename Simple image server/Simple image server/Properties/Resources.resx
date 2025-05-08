@@ -327,4 +327,10 @@
   <data name="NoNewVersionAvailable" xml:space="preserve">
     <value>No new version available</value>
   </data>
+  <data name="ImageAlreadyInList" xml:space="preserve">
+    <value>Image already in list</value>
+  </data>
+  <data name="SourceListNotFound" xml:space="preserve">
+    <value>Sourcelist not found</value>
+  </data>
 </root>

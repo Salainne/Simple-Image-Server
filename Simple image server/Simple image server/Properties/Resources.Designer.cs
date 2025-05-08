@@ -421,6 +421,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image already in list.
+        /// </summary>
+        internal static string ImageAlreadyInList {
+            get {
+                return ResourceManager.GetString("ImageAlreadyInList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  (inactive).
         /// </summary>
         internal static string Inactive {
@@ -642,6 +651,15 @@ namespace Simple_image_server.Properties {
         internal static string SettingsFolderNotFound {
             get {
                 return ResourceManager.GetString("SettingsFolderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sourcelist not found.
+        /// </summary>
+        internal static string SourceListNotFound {
+            get {
+                return ResourceManager.GetString("SourceListNotFound", resourceCulture);
             }
         }
         

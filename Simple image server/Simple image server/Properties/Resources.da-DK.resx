@@ -321,4 +321,10 @@
   <data name="NoNewVersionAvailable" xml:space="preserve">
     <value>Ingen ny version tilgængelig</value>
   </data>
+  <data name="ImageAlreadyInList" xml:space="preserve">
+    <value>Billedet findes allerede i listen</value>
+  </data>
+  <data name="SourceListNotFound" xml:space="preserve">
+    <value>Kildeliste ikke fundet</value>
+  </data>
 </root>

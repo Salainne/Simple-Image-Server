@@ -468,10 +468,14 @@
             // 
             // lbLists
             // 
+            this.lbLists.AllowDrop = true;
             resources.ApplyResources(this.lbLists, "lbLists");
             this.lbLists.FormattingEnabled = true;
             this.lbLists.Name = "lbLists";
             this.lbLists.SelectedIndexChanged += new System.EventHandler(this.lbLists_SelectedIndexChanged);
+            this.lbLists.DragDrop += new System.Windows.Forms.DragEventHandler(this.lbLists_DragDrop);
+            this.lbLists.DragEnter += new System.Windows.Forms.DragEventHandler(this.lbLists_DragEnter);
+            this.lbLists.DragOver += new System.Windows.Forms.DragEventHandler(this.lbLists_DragOver);
             // 
             // btnAddNewList
             // 
@@ -502,6 +506,7 @@
             this.lbElementsInList.FormattingEnabled = true;
             this.lbElementsInList.Name = "lbElementsInList";
             this.lbElementsInList.SelectedIndexChanged += new System.EventHandler(this.lbElementsInList_SelectedIndexChanged);
+            this.lbElementsInList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbElementsInList_MouseDown);
             // 
             // btnAddToList
             // 
