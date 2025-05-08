@@ -25,19 +25,11 @@ namespace Simple_image_server
 {
     public partial class Form1 : Form
     {
-        enum LogLevel
-        {
-            Info = 0,
-            Warning = 1,
-            Error = 2
-        }
-
         private string _settingsPath;
 
         private Thread serverThread;
         private HttpListener httpListener;
         private bool isRunning = false;
-        private LogLevel logLevel = LogLevel.Info;
         private Model.Settings _settings;
         private string _contentLocation = Application.StartupPath + "/content";
         private string _appName = "SimpleImageServer";
@@ -86,7 +78,7 @@ namespace Simple_image_server
 
             if (ResourceHelper.MissingResourceentries.ToString() != string.Empty)
             {
-                Log(ResourceHelper.MissingResourceentries.ToString(), logLevel);
+                Log(ResourceHelper.MissingResourceentries.ToString(), _settings.Loglevel);
             }
         }
 
@@ -190,7 +182,36 @@ namespace Simple_image_server
                 }
                 SetFormLocalizationTexts();
             };
-            if(_settings.CultureInfoName == "da-DK")
+
+            cmbDebugLevel.Items.Clear();
+            foreach (var item in Enum.GetValues(typeof(LogLevel)))
+            {
+                cmbDebugLevel.Items.Add(item.ToString());
+                if (_settings.Loglevel == (LogLevel)item)
+                {
+                    cmbDebugLevel.SelectedItem = item.ToString();
+                }
+            }
+
+            cmbDebugLevel.SelectedIndexChanged += (s, ee) => { 
+                switch(cmbDebugLevel.SelectedItem.ToString())
+                {
+                    case "Debug":
+                        _settings.Loglevel = LogLevel.Debug;
+                        break;
+                    case "Info":
+                        _settings.Loglevel = LogLevel.Info;
+                        break;
+                    case "Warning":
+                        _settings.Loglevel = LogLevel.Warning;
+                        break;
+                    case "Error":
+                        _settings.Loglevel = LogLevel.Error;
+                        break;
+                }
+            };
+
+            if (_settings.CultureInfoName == "da-DK")
             {
                 cmbLanguage.SelectedIndex = 1;
             }
@@ -617,9 +638,9 @@ namespace Simple_image_server
                 client.LastSeenIndices.Dequeue();
             }
 
-            Invoke(new Action(() => Log($"History: [{string.Join(", ", client.LastSeenIndices)}]", LogLevel.Info)));
-            Invoke(new Action(() => Log($"Possible: {string.Join(", ", possible)} — Chosen: {chosen}", LogLevel.Info)));
-            Invoke(new Action(() => Log($"Images: {count}, HistoryLimit: {dynamicHistorySize}", LogLevel.Info)));
+            Invoke(new Action(() => Log($"History: [{string.Join(", ", client.LastSeenIndices)}]", LogLevel.Debug)));
+            Invoke(new Action(() => Log($"Possible: {string.Join(", ", possible)} — Chosen: {chosen}", LogLevel.Debug)));
+            Invoke(new Action(() => Log($"Images: {count}, HistoryLimit: {dynamicHistorySize}", LogLevel.Debug)));
 
             return chosen;
         }
@@ -720,7 +741,7 @@ namespace Simple_image_server
 
         private void Log(string message, LogLevel logLevel)
         {
-            if(logLevel < this.logLevel)
+            if(logLevel < _settings.Loglevel)
             {
                 return;
             }

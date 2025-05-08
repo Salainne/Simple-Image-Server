@@ -330,4 +330,7 @@
   <data name="chkRandomImageFromAllActiveListsWithName" xml:space="preserve">
     <value>Sammenlæg billeder fra alle lister som matcher og vælg tilfældigt billede</value>
   </data>
+  <data name="label10" xml:space="preserve">
+    <value>Loglevel</value>
+  </data>
 </root>

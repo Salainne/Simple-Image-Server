@@ -336,4 +336,7 @@
   <data name="chkRandomImageFromAllActiveListsWithName" xml:space="preserve">
     <value>Pool images from all matching active lists and deliver random</value>
   </data>
+  <data name="label10" xml:space="preserve">
+    <value>Loglevel</value>
+  </data>
 </root>

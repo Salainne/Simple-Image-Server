@@ -475,6 +475,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loglevel.
+        /// </summary>
+        internal static string label10 {
+            get {
+                return ResourceManager.GetString("label10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active timeperiod:.
         /// </summary>
         internal static string label2 {

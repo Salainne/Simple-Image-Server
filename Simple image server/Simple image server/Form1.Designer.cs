@@ -86,6 +86,8 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.cmbDebugLevel = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -122,6 +124,8 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.cmbDebugLevel);
             this.groupBox1.Controls.Add(this.chkRandomImageFromAllActiveListsWithName);
             this.groupBox1.Controls.Add(this.cmbLanguage);
             this.groupBox1.Controls.Add(this.btnOpenSettingsfolder);
@@ -548,6 +552,22 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // cmbDebugLevel
+            // 
+            this.cmbDebugLevel.FormattingEnabled = true;
+            this.cmbDebugLevel.Items.AddRange(new object[] {
+            resources.GetString("cmbDebugLevel.Items"),
+            resources.GetString("cmbDebugLevel.Items1"),
+            resources.GetString("cmbDebugLevel.Items2"),
+            resources.GetString("cmbDebugLevel.Items3")});
+            resources.ApplyResources(this.cmbDebugLevel, "cmbDebugLevel");
+            this.cmbDebugLevel.Name = "cmbDebugLevel";
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -640,6 +660,8 @@
         private System.Windows.Forms.ComboBox cmbLanguage;
         private System.Windows.Forms.Button btnDuplicateList;
         private System.Windows.Forms.CheckBox chkRandomImageFromAllActiveListsWithName;
+        private System.Windows.Forms.ComboBox cmbDebugLevel;
+        private System.Windows.Forms.Label label10;
     }
 }
 
