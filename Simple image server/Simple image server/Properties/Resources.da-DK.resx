@@ -327,4 +327,7 @@
   <data name="SourceListNotFound" xml:space="preserve">
     <value>Kildeliste ikke fundet</value>
   </data>
+  <data name="chkRandomImageFromAllActiveListsWithName" xml:space="preserve">
+    <value>Sammenlæg billeder fra alle lister som matcher og vælg tilfældigt billede</value>
+  </data>
 </root>

@@ -209,6 +209,7 @@ namespace Simple_image_server
             chkAllowremoteAccess.Checked = _settings.AllowRemoteAccess;
             txtPort.Text = _settings.Port.ToString();
             chkAutostart.Checked = _settings.Autostart;
+            chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
 
         }
 
@@ -295,6 +296,7 @@ namespace Simple_image_server
             _settings.Port = int.TryParse(txtPort.Text, out int port) ? port : 9191;
             _settings.Autostart = chkAutostart.Checked;
             _settings.DarkMode = DarkMode.Checked;
+            _settings.RandomImageFromAllActiveListsWithName = chkRandomImageFromAllActiveListsWithName.Checked;
 
             if (!Directory.Exists(Path.GetDirectoryName(_settingsPath)))
             {
@@ -460,7 +462,7 @@ namespace Simple_image_server
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             var template = File.ReadAllText(Path.Combine(basePath, "assets", templatename + ".html"));
 
-            var list = GetFirstActivelistWithName(builder.Path.Replace("/", ""));
+            var list = GetActivelistWithName(builder.Path.Replace("/", ""));
             var interval = 10000;
             var title = Resources.Form1;
             if (list != null)
@@ -502,6 +504,7 @@ namespace Simple_image_server
             return Encoding.UTF8.GetBytes(json);
         }
 
+        
         private byte[] GetReponse(
             string clientid, 
             bool cropToSquare, 
@@ -530,7 +533,7 @@ namespace Simple_image_server
                 client.LastServedImageList = filePath;
             }
 
-            var list = GetFirstActivelistWithName(filePath);
+            var list = GetActivelistWithName(filePath);
             if (list == null)
             {
                 statuscode = 404;
@@ -545,6 +548,11 @@ namespace Simple_image_server
                 return null;
             }
 
+            if(client.LastServedImageId == 0)
+            {
+                client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
+            }
+            
             // When changing from one active list to another you could end in a situation where the index gives you a index out of range exception.
             EnforceImagelistBounds(client, list);
 
@@ -568,13 +576,15 @@ namespace Simple_image_server
             if (client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
             {
                 client.LastNewImagetime = DateTime.Now;
-                client.LastServedImageId++;
+                
                 if (list.UseRandomImage)
                 {
-                    client.LastServedImageId = _random.Next(0, list.Images.Count);
+                    //client.LastServedImageId = _random.Next(0, list.Images.Count);
+                    client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
                 }
                 else
                 {
+                    client.LastServedImageId++;
                     EnforceImagelistBounds(client, list);
                 }
             }
@@ -584,13 +594,43 @@ namespace Simple_image_server
             return bytes;
         }
 
+        private int GetNonRepeatingRandomIndex(int count, Client client)
+        {
+            if (count <= 1) return 0;
+
+            var possible = Enumerable.Range(0, count)
+                                           .Where(i => !client.LastSeenIndices.Contains(i))
+                                           .ToList();
+
+            if (possible.Count == 0)
+            {
+                client.LastSeenIndices.Clear();
+                possible = Enumerable.Range(0, count).ToList();
+            }
+
+            var chosen = possible[_random.Next(possible.Count)];
+
+            client.LastSeenIndices.Enqueue(chosen);
+            var dynamicHistorySize = Math.Min(count - 1, Math.Max(1, count / 2));
+            if (client.LastSeenIndices.Count > dynamicHistorySize)
+            {
+                client.LastSeenIndices.Dequeue();
+            }
+
+            Invoke(new Action(() => Log($"History: [{string.Join(", ", client.LastSeenIndices)}]", LogLevel.Info)));
+            Invoke(new Action(() => Log($"Possible: {string.Join(", ", possible)} — Chosen: {chosen}", LogLevel.Info)));
+            Invoke(new Action(() => Log($"Images: {count}, HistoryLimit: {dynamicHistorySize}", LogLevel.Info)));
+
+            return chosen;
+        }
+
         private void EnforceImagelistBounds(Client client, Imagelist list)
         {
             if (client.LastServedImageId >= list.Images.Count)
             {
                 if (list.UseRandomImage)
                 {
-                    client.LastServedImageId = _random.Next(0, list.Images.Count);
+                    client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
                 }
                 else
                 {
@@ -600,7 +640,7 @@ namespace Simple_image_server
         }
 
 
-        private Imagelist GetFirstActivelistWithName(string filePath)
+        private Imagelist GetActivelistWithName(string filePath)
         {
             var lists = _settings.Lists.Where(
                 a =>
@@ -611,7 +651,20 @@ namespace Simple_image_server
                 a.IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute)
                 ).ToList();
 
-            return lists.FirstOrDefault();
+            if (!_settings.RandomImageFromAllActiveListsWithName)
+            {
+                return lists.FirstOrDefault();
+            }
+
+            return new Imagelist
+            {
+                Name = string.Join("-", lists.Select(a => a.Name)),
+                Description = string.Join("-", lists.Select(a => a.Description)),
+                Images = lists.SelectMany(a => a.Images).ToList(),
+                UseRandomImage = true,
+                MaxWidth = lists.Max(a => a.MaxWidth),
+                Interval = lists.Max(a => a.Interval),
+            };
         }
 
 
@@ -1222,6 +1275,11 @@ namespace Simple_image_server
             {
                 lbLists.ClearSelected(); // Fjern markering hvis vi er udenfor
             }
+        }
+
+        private void chkRandomImageFromAllActiveListsWithName_CheckedChanged(object sender, EventArgs e)
+        {
+            SaveSettings();
         }
     }
 }

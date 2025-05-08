@@ -14,10 +14,13 @@ namespace Simple_image_server.Model
 
         public int LastServedImageId { get; set; }
         public string LastServedImageList { get; set; }
+        public Queue<int> LastSeenIndices { get; set; }
+        public int HistorySize { get { return 5; } }
 
         public Client()
         {
             LastNewImagetime = DateTime.Now;
+            LastSeenIndices = new Queue<int>();
         }
     }
 }

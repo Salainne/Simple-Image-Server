@@ -333,4 +333,7 @@
   <data name="SourceListNotFound" xml:space="preserve">
     <value>Sourcelist not found</value>
   </data>
+  <data name="chkRandomImageFromAllActiveListsWithName" xml:space="preserve">
+    <value>Pool images from all matching active lists and deliver random</value>
+  </data>
 </root>

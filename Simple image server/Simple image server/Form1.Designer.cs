@@ -34,6 +34,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkRandomImageFromAllActiveListsWithName = new System.Windows.Forms.CheckBox();
             this.cmbLanguage = new System.Windows.Forms.ComboBox();
             this.btnOpenSettingsfolder = new System.Windows.Forms.Button();
             this.btnSaveSettingsNow = new System.Windows.Forms.Button();
@@ -121,6 +122,7 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.chkRandomImageFromAllActiveListsWithName);
             this.groupBox1.Controls.Add(this.cmbLanguage);
             this.groupBox1.Controls.Add(this.btnOpenSettingsfolder);
             this.groupBox1.Controls.Add(this.btnSaveSettingsNow);
@@ -133,6 +135,13 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // chkRandomImageFromAllActiveListsWithName
+            // 
+            resources.ApplyResources(this.chkRandomImageFromAllActiveListsWithName, "chkRandomImageFromAllActiveListsWithName");
+            this.chkRandomImageFromAllActiveListsWithName.Name = "chkRandomImageFromAllActiveListsWithName";
+            this.chkRandomImageFromAllActiveListsWithName.UseVisualStyleBackColor = true;
+            this.chkRandomImageFromAllActiveListsWithName.CheckedChanged += new System.EventHandler(this.chkRandomImageFromAllActiveListsWithName_CheckedChanged);
             // 
             // cmbLanguage
             // 
@@ -630,6 +639,7 @@
         private System.Windows.Forms.Button btnDeleteSelectedList;
         private System.Windows.Forms.ComboBox cmbLanguage;
         private System.Windows.Forms.Button btnDuplicateList;
+        private System.Windows.Forms.CheckBox chkRandomImageFromAllActiveListsWithName;
     }
 }
 

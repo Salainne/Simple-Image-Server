@@ -268,6 +268,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pool images from all matching active lists and deliver random.
+        /// </summary>
+        internal static string chkRandomImageFromAllActiveListsWithName {
+            get {
+                return ResourceManager.GetString("chkRandomImageFromAllActiveListsWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to update now.
         /// </summary>
         internal static string ClickToUpdateNow {

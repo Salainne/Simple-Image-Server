@@ -19,11 +19,13 @@ namespace Simple_image_server.Model
         public string CultureInfoName { get; set; }
 
         public bool ShowUpdatenowDialogOnAppStart { get; set; }
+        public bool RandomImageFromAllActiveListsWithName { get; set; }
 
         public Settings()
         {
             Lists = new List<Model.Imagelist>();
             CultureInfoName = "en-US";
+            RandomImageFromAllActiveListsWithName = true;
         }
     }
 }
