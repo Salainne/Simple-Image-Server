@@ -602,8 +602,9 @@ namespace Simple_image_server
         private Imagelist GetFirstActivelistWithName(string filePath)
         {
             var lists = _settings.Lists.Where(
-                a => 
-                string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase) && 
+                a =>
+                a.Name.Split(';').Any(s => string.Equals(s, filePath, StringComparison.OrdinalIgnoreCase)) &&
+                //string.Equals(a.Name, filePath, StringComparison.OrdinalIgnoreCase) && 
                 a.IsActive && 
                 a.ActiveDays.HasFlag((OpenDays)(1 << (int)DateTime.Now.DayOfWeek)) &&
                 a.IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute)
