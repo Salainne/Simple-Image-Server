@@ -9,7 +9,8 @@ If you click on a image in the "Elements in list", you will see a preview of the
 To use the images/test the setup, open a browser and navigate to: http://127.0.0.1:9191/[listname] where [listname] is the name of the list you just created.  
 The port 9191 is standard and you can change that if you want. Just use a port you are not already using for something else..  
 You should now see the first image in the list shown in your browser. If you wait a few seconds and refresh the browser it will show image number two from the list. If you hit refresh faster it will continue to show the same image for some time.
-That time interval is configured under [Interval] in the [List settings] block to the left.
+That time interval is configured under [Interval] in the [List settings] block to the left. 
+The time interval can not also be sat via url parameter. Set interval=10 to overwrite the list interval and use 10 seconds instead. You can use all numbers above 0.  
 
 If you have more than one client the currentimage/next image will be the same across all the clients. This can be a problem for some purposes and can be fixed by adding clientid to the url.
 Here an example:  
