@@ -414,7 +414,9 @@ namespace Simple_image_server
 
                     var clientid = request.QueryString["clientid"] ?? "anyclient";
                     var cropToSquare = request.QueryString["croptosquare"] == "1";
-                    var width = request.QueryString["width"] != null ? int.Parse(request.QueryString["width"]) : 0;
+
+                    int.TryParse(request.QueryString["width"], out var width);
+                    //var width = request.QueryString["width"] != null ? int.Parse(request.QueryString["width"]) : 0;
                     var format = request.QueryString["format"] != null ? request.QueryString["format"] : "image";
 
                     response.ContentType = "image/png";
