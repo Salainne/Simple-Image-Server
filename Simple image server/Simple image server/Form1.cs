@@ -672,6 +672,11 @@ namespace Simple_image_server
                 a.IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute)
                 ).ToList();
 
+            if (lists.Any() == false)
+            {
+                return null;
+            }
+
             if (!_settings.RandomImageFromAllActiveListsWithName)
             {
                 return lists.FirstOrDefault();
