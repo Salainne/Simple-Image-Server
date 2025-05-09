@@ -53,6 +53,9 @@ namespace Simple_image_server
             lbLists.DrawMode = DrawMode.OwnerDrawFixed;
             lbLists.DrawItem += LbLists_DrawItem;
 
+            lbElementsInList.DrawMode = DrawMode.OwnerDrawFixed;
+            lbElementsInList.DrawItem += LbElementsInList_DrawItem;
+
             ListsettingsGroupSetEnabled(false);
 
             btnServertoggle.Text = Resources.StartServer;
@@ -1062,6 +1065,40 @@ namespace Simple_image_server
                 foreColor,
                 TextFormatFlags.Left
             );
+
+            var imageCnt = ((Imagelist)item.Tag).Images.Count;
+            TextRenderer.DrawText(
+                e.Graphics,
+                $"[{imageCnt} image{(imageCnt != 1 ? "s" : "")}]",
+                lbLists.Font,
+                e.Bounds,
+                foreColor,
+                TextFormatFlags.Right
+            );
+            e.DrawFocusRectangle();
+        }
+
+        private void LbElementsInList_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+            {
+                return;
+            }
+            var item = (ListboxItemWrapper)lbElementsInList.Items[e.Index];
+            Color foreColor = this.ForeColor;
+            var txt = $"[{e.Index}] {item.Name}";
+
+
+            e.DrawBackground();
+            TextRenderer.DrawText(
+                e.Graphics,
+                txt,
+                lbElementsInList.Font,
+                e.Bounds,
+                this.ForeColor,
+                TextFormatFlags.Left
+            );
+
             e.DrawFocusRectangle();
         }
 
