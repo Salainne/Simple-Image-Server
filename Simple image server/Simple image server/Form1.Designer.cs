@@ -34,6 +34,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.cmbDebugLevel = new System.Windows.Forms.ComboBox();
             this.chkRandomImageFromAllActiveListsWithName = new System.Windows.Forms.CheckBox();
             this.cmbLanguage = new System.Windows.Forms.ComboBox();
             this.btnOpenSettingsfolder = new System.Windows.Forms.Button();
@@ -86,8 +88,7 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.cmbDebugLevel = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -101,6 +102,10 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
@@ -139,6 +144,22 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
+            // cmbDebugLevel
+            // 
+            this.cmbDebugLevel.FormattingEnabled = true;
+            this.cmbDebugLevel.Items.AddRange(new object[] {
+            resources.GetString("cmbDebugLevel.Items"),
+            resources.GetString("cmbDebugLevel.Items1"),
+            resources.GetString("cmbDebugLevel.Items2"),
+            resources.GetString("cmbDebugLevel.Items3")});
+            resources.ApplyResources(this.cmbDebugLevel, "cmbDebugLevel");
+            this.cmbDebugLevel.Name = "cmbDebugLevel";
             // 
             // chkRandomImageFromAllActiveListsWithName
             // 
@@ -552,28 +573,24 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // cmbDebugLevel
+            // splitContainer1
             // 
-            this.cmbDebugLevel.FormattingEnabled = true;
-            this.cmbDebugLevel.Items.AddRange(new object[] {
-            resources.GetString("cmbDebugLevel.Items"),
-            resources.GetString("cmbDebugLevel.Items1"),
-            resources.GetString("cmbDebugLevel.Items2"),
-            resources.GetString("cmbDebugLevel.Items3")});
-            resources.ApplyResources(this.cmbDebugLevel, "cmbDebugLevel");
-            this.cmbDebugLevel.Name = "cmbDebugLevel";
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // label10
+            // splitContainer1.Panel1
             // 
-            resources.ApplyResources(this.label10, "label10");
-            this.label10.Name = "label10";
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox3);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
             // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusStrip1);
@@ -598,6 +615,10 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -662,6 +683,7 @@
         private System.Windows.Forms.CheckBox chkRandomImageFromAllActiveListsWithName;
         private System.Windows.Forms.ComboBox cmbDebugLevel;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 
