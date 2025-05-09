@@ -64,6 +64,7 @@
     <Compile Include="Model\Imagelist.cs" />
     <Compile Include="Model\ListboxItemWrapper.cs" />
     <Compile Include="Model\Loglevel.cs" />
+    <Compile Include="Model\LogMessage.cs" />
     <Compile Include="Model\OpenDays.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Program.cs" />

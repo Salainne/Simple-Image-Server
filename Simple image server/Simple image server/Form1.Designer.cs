@@ -86,9 +86,9 @@
             this.btnAddToList = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.pbPreview = new System.Windows.Forms.PictureBox();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.lbLog = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -552,8 +552,8 @@
             // groupBox4
             // 
             resources.ApplyResources(this.groupBox4, "groupBox4");
+            this.groupBox4.Controls.Add(this.lbLog);
             this.groupBox4.Controls.Add(this.pbPreview);
-            this.groupBox4.Controls.Add(this.txtLog);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
             // 
@@ -562,12 +562,6 @@
             resources.ApplyResources(this.pbPreview, "pbPreview");
             this.pbPreview.Name = "pbPreview";
             this.pbPreview.TabStop = false;
-            // 
-            // txtLog
-            // 
-            resources.ApplyResources(this.txtLog, "txtLog");
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
             // 
             // openFileDialog1
             // 
@@ -585,6 +579,14 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
+            // 
+            // lbLog
+            // 
+            resources.ApplyResources(this.lbLog, "lbLog");
+            this.lbLog.FormattingEnabled = true;
+            this.lbLog.Name = "lbLog";
+            this.lbLog.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbLog_MouseClick);
+            this.lbLog.SelectedIndexChanged += new System.EventHandler(this.lbLog_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -613,7 +615,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numToHour)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -641,7 +642,6 @@
         private System.Windows.Forms.Button btnAddToList;
         private System.Windows.Forms.ListBox lbElementsInList;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnStartOnBoot;
         private System.Windows.Forms.PictureBox pbPreview;
@@ -684,6 +684,7 @@
         private System.Windows.Forms.ComboBox cmbDebugLevel;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ListBox lbLog;
     }
 }
 

@@ -35,6 +35,7 @@ namespace Simple_image_server
         private string _appName = "SimpleImageServer";
         private Random _random = new Random();
         private Guid _dragFromList;
+        private Guid? _imageToFind = null;
 
         private Dictionary<string, Model.Client> _clientIds = new Dictionary<string, Model.Client>();
         
@@ -55,6 +56,9 @@ namespace Simple_image_server
 
             lbElementsInList.DrawMode = DrawMode.OwnerDrawFixed;
             lbElementsInList.DrawItem += LbElementsInList_DrawItem;
+
+            lbLog.DrawMode = DrawMode.OwnerDrawFixed;
+            lbLog.DrawItem += lbLog_DrawItem;
 
             ListsettingsGroupSetEnabled(false);
 
@@ -418,6 +422,7 @@ namespace Simple_image_server
                     byte[] resultBytes = null;
                     string statusmessage = string.Empty;
                     int statuscode = 200;
+                    ImageElement selectedImage = null;
 
                     if (format == "json")
                     {
@@ -435,11 +440,24 @@ namespace Simple_image_server
                     }
                     else
                     {
-                        resultBytes = GetReponse(clientid, cropToSquare, width, filePath, out statuscode, out statusmessage);
+                        resultBytes = GetReponse(clientid, cropToSquare, width, filePath, out statuscode, out statusmessage, out selectedImage);
                         response.StatusCode = statuscode;
                     }
 
-                    Invoke(new Action(() => Log($"GET: {filePath} {statusmessage}. Client: {clientid} Width: {width}, crop: {cropToSquare}, Statuscode: {statuscode}", LogLevel.Info)));
+                    Invoke(new Action(() => Log(
+                        new LogMessage
+                        {
+                            Text = $"GET: {filePath} {statusmessage}. Client: {clientid} Width: {width}, crop: {cropToSquare}, Statuscode: {statuscode}",
+                            SelectedImage = selectedImage,
+                            Width = width,
+                            Crop = cropToSquare,
+                            Statuscode = statuscode,
+                            Filepath = filePath,
+                            StatusMessage = statusmessage,
+                            LogLevel = LogLevel.Info,
+                            Client = clientid
+                        }
+                    )));
                     if (resultBytes != null)
                     {
                         response.ContentLength64 = resultBytes.Length;
@@ -535,7 +553,8 @@ namespace Simple_image_server
             int width,
             string filePath, 
             out int statuscode, 
-            out string statusmessage)
+            out string statusmessage,
+            out ImageElement selectedImage)
         {
             if (!_clientIds.ContainsKey(clientid))
             {
@@ -562,6 +581,7 @@ namespace Simple_image_server
             {
                 statuscode = 404;
                 statusmessage = Resources.ListNotFound;
+                selectedImage = null;
                 return null;
             }
 
@@ -569,6 +589,7 @@ namespace Simple_image_server
             {
                 statuscode = 200;
                 statusmessage = Resources.EmptyList;
+                selectedImage = null;
                 return null;
             }
 
@@ -581,6 +602,7 @@ namespace Simple_image_server
             EnforceImagelistBounds(client, list);
 
             var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
+            selectedImage = list.Images[client.LastServedImageId];
 
             if (cropToSquare)
             {
@@ -749,15 +771,28 @@ namespace Simple_image_server
 
         private void Log(string message, LogLevel logLevel)
         {
-            if(logLevel < _settings.Loglevel)
+            Log(new LogMessage { Text = message, LogLevel = logLevel });
+        }
+
+        private void Log(LogMessage message)
+        {
+            if(message.LogLevel < _settings.Loglevel)
             {
                 return;
             }
-            var sb = new StringBuilder();
-            sb.AppendLine($"{DateTime.Now}: {message}");
-            sb.Append(string.Join(Environment.NewLine, txtLog.Lines.Take(30).ToArray()));
+            
+            var txt = $"{message.Text}";
+            message.Eventtime = DateTime.Now;
 
-            txtLog.Text = sb.ToString();
+            lbLog.Items.Insert(0, new ListboxItemWrapper
+            {
+                Name = txt,
+                Tag = message
+            });
+            if (lbLog.Items.Count > 30)
+            {
+                lbLog.Items.RemoveAt(lbLog.Items.Count - 1);
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -851,6 +886,16 @@ namespace Simple_image_server
                         Tag = image
                     };
                     lbElementsInList.Items.Add(item);
+                }
+
+                if(_imageToFind != null)
+                {
+                    var found = list.Images.FirstOrDefault(a => a.Id == _imageToFind);
+                    if (found != null)
+                    {
+                        lbElementsInList.SelectedItem = lbElementsInList.Items.Cast<ListboxItemWrapper>().FirstOrDefault(a => a.Tag == found);
+                        _imageToFind = null;
+                    }
                 }
             }
         }
@@ -1102,6 +1147,67 @@ namespace Simple_image_server
             e.DrawFocusRectangle();
         }
 
+        private void lbLog_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0)
+            {
+                return;
+            }
+            var item = (ListboxItemWrapper)lbLog.Items[e.Index];
+            var log = item.Tag as LogMessage;
+
+            Color foreColor = this.ForeColor;
+            var txt = $"{log.Eventtime} {item.Name}";
+            txt += $" Client: {log.Client}";
+
+            if (log.SelectedImage != null)
+            {
+                txt = $"{log.Eventtime} GET {log.Filepath}. " + (log.Statuscode == 200 ? "OK" : "ERROR");
+                if (log.Crop)
+                {
+                    txt += " Cropped to square";
+                }
+                if (log.Width > 0)
+                {
+                    txt += $" Width: {log.Width}";
+                }
+                txt += $" Client: {log.Client}";
+                txt += $" Img: {log.SelectedImage.Id}";
+
+                if(log.Statuscode != 200)
+                {
+                    foreColor = Color.Red;
+                }
+            }
+            else
+            {
+                if (log.LogLevel == LogLevel.Error)
+                {
+                    foreColor = Color.Red;
+                }
+                else if (log.LogLevel == LogLevel.Warning)
+                {
+                    foreColor = Color.Orange;
+                }
+                else if (log.Statuscode > 0 && log.Statuscode != 200)
+                {
+                    foreColor = Color.Orange;
+                }
+            }
+
+            e.DrawBackground();
+            TextRenderer.DrawText(
+                e.Graphics,
+                txt,
+                lbLog.Font,
+                e.Bounds,
+                foreColor,
+                TextFormatFlags.Left
+            );
+
+            e.DrawFocusRectangle();
+        }
+
         private void btnSaveSettingsNow_Click(object sender, EventArgs e)
         {
             SaveSettings();
@@ -1343,6 +1449,47 @@ namespace Simple_image_server
         private void chkRandomImageFromAllActiveListsWithName_CheckedChanged(object sender, EventArgs e)
         {
             SaveSettings();
+        }
+
+        private void lbLog_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ListBox)sender).SelectedItem == null)
+            {
+                return;
+            }
+
+            var theElement = ((ListboxItemWrapper)((ListBox)sender).SelectedItem).Tag as LogMessage;
+            if(theElement.SelectedImage == null)
+            {
+                return;
+            }
+
+            var theList = _settings.Lists.FirstOrDefault(a => a.Images.Select(b => b.Id).Contains(theElement.SelectedImage.Id));
+            //lbLists.SelectedIndex = lbLists.Items.
+            var index = -1;
+            for(var i = 0; i < lbLists.Items.Count; i++)
+            {
+                if(theList.Id == ((Simple_image_server.Model.Imagelist)((ListboxItemWrapper)lbLists.Items[i]).Tag).Id)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            _imageToFind = theElement.SelectedImage.Id;
+            if (index > -1)
+            {
+                lbLists.SelectedIndex = index;
+                if(lbLists.SelectedIndex == index)
+                {
+                    lbLists_SelectedIndexChanged(this.lbLists, e);
+                }
+            }
+        }
+
+        private void lbLog_MouseClick(object sender, MouseEventArgs e)
+        {
+            lbLog_SelectedIndexChanged(sender, e);
         }
     }
 }
