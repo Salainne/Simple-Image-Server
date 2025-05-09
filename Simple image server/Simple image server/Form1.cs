@@ -416,6 +416,7 @@ namespace Simple_image_server
                     var cropToSquare = request.QueryString["croptosquare"] == "1";
 
                     int.TryParse(request.QueryString["width"], out var width);
+                    int.TryParse(request.QueryString["interval"], out var interval);
                     //var width = request.QueryString["width"] != null ? int.Parse(request.QueryString["width"]) : 0;
                     var format = request.QueryString["format"] != null ? request.QueryString["format"] : "image";
 
@@ -442,7 +443,7 @@ namespace Simple_image_server
                     }
                     else
                     {
-                        resultBytes = GetReponse(clientid, cropToSquare, width, filePath, out statuscode, out statusmessage, out selectedImage);
+                        resultBytes = GetReponse(clientid, cropToSquare, width, interval, filePath, out statuscode, out statusmessage, out selectedImage);
                         response.StatusCode = statuscode;
                     }
 
@@ -553,6 +554,7 @@ namespace Simple_image_server
             string clientid, 
             bool cropToSquare, 
             int width,
+            int interval,
             string filePath, 
             out int statuscode, 
             out string statusmessage,
@@ -595,7 +597,12 @@ namespace Simple_image_server
                 return null;
             }
 
-            if(client.LastServedImageId == 0)
+            if(interval > 0)
+            {
+                list.Interval = interval;
+            }
+
+            if (client.LastServedImageId == 0)
             {
                 client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
             }
