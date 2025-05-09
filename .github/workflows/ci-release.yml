@@ -152,15 +152,5 @@ jobs:
           files: |
             SimpleImageServer-*.zip
           name: Release ${{ github.ref_name }}
-          body: |
-            🎉 This is the release for version ${{ github.ref_name }}!
-  
-            What's Changed:
-            ${{ steps.changelog.outputs.changelog }}
-  
-            ---
-            🛡️ **Note:**  
-            This build is automatically signed and timestamped.  
-            Windows Defender warnings should no longer appear after trust propagation.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
