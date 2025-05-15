@@ -85,10 +85,10 @@
             this.lbElementsInList = new System.Windows.Forms.ListBox();
             this.btnAddToList = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lbLog = new System.Windows.Forms.ListBox();
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.lbLog = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -557,6 +557,14 @@
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
             // 
+            // lbLog
+            // 
+            resources.ApplyResources(this.lbLog, "lbLog");
+            this.lbLog.FormattingEnabled = true;
+            this.lbLog.Name = "lbLog";
+            this.lbLog.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbLog_MouseClick);
+            this.lbLog.SelectedIndexChanged += new System.EventHandler(this.lbLog_SelectedIndexChanged);
+            // 
             // pbPreview
             // 
             resources.ApplyResources(this.pbPreview, "pbPreview");
@@ -580,14 +588,6 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
             // 
-            // lbLog
-            // 
-            resources.ApplyResources(this.lbLog, "lbLog");
-            this.lbLog.FormattingEnabled = true;
-            this.lbLog.Name = "lbLog";
-            this.lbLog.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbLog_MouseClick);
-            this.lbLog.SelectedIndexChanged += new System.EventHandler(this.lbLog_SelectedIndexChanged);
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -600,6 +600,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.VisibleChanged += new System.EventHandler(this.Form1_VisibleChanged);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);

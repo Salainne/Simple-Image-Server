@@ -60,6 +60,8 @@
     </Compile>
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\DarkModeTheme.cs" />
+    <Compile Include="Model\ImageCache.cs" />
+    <Compile Include="Model\ImageCacheKey.cs" />
     <Compile Include="Model\ImageElement.cs" />
     <Compile Include="Model\Imagelist.cs" />
     <Compile Include="Model\ListboxItemWrapper.cs" />

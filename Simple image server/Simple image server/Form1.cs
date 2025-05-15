@@ -41,12 +41,13 @@ namespace Simple_image_server
         
         private DarkModeTheme _darkMode = null;
         private System.Windows.Forms.Timer _timer = null;
+        private ImageCache _imageCache = new ImageCache(500L * 1024 * 1024); // 500 MB
 
         public Form1()
         {
             _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings.json");
 #if DEBUG
-            _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings-DEBUG.json");
+            //_settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings-DEBUG.json");
 #endif
 
             InitializeComponent();
@@ -91,7 +92,10 @@ namespace Simple_image_server
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lbLists.Invalidate();
+            if (this.Visible)
+            {
+                lbLists.Invalidate();
+            }
         }
 
         private void ListsettingsGroupSetEnabled(bool enabled)
@@ -610,23 +614,42 @@ namespace Simple_image_server
             // When changing from one active list to another you could end in a situation where the index gives you a index out of range exception.
             EnforceImagelistBounds(client, list);
 
-            var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
+            //var bytes = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
+            //selectedImage = list.Images[client.LastServedImageId];
+
+            //if (cropToSquare)
+            //{
+            //    bytes = CropToSquare(bytes);
+            //}
+
+            //if (width > 3200)
+            //{
+            //    width = 3200;
+            //}
+            //if (width > 0 || (list.MaxWidth > 0 && width == 0))
+            //{
+            //    bytes = ResizeImage(bytes, width > 0 ? width : list.MaxWidth);
+            //}
+            var bytes = _imageCache.GetOrAdd(
+                list.Images[client.LastServedImageId].Path,
+                cropToSquare,
+                width,
+                () =>
+                {
+                    var data = File.ReadAllBytes(list.Images[client.LastServedImageId].Path);
+
+                    if (cropToSquare)
+                        data = CropToSquare(data);
+
+                    if (width > 3200)
+                        width = 3200;
+
+                    if (width > 0 || (list.MaxWidth > 0 && width == 0))
+                        data = ResizeImage(data, width > 0 ? width : list.MaxWidth);
+
+                    return data;
+                });
             selectedImage = list.Images[client.LastServedImageId];
-
-            if (cropToSquare)
-            {
-                bytes = CropToSquare(bytes);
-            }
-
-            if (width > 3200)
-            {
-                width = 3200;
-            }
-            if (width > 0 || (list.MaxWidth > 0 && width == 0))
-            {
-                bytes = ResizeImage(bytes, width > 0 ? width : list.MaxWidth);
-            }
-
 
             if (client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
             {
@@ -1499,6 +1522,11 @@ namespace Simple_image_server
         private void lbLog_MouseClick(object sender, MouseEventArgs e)
         {
             lbLog_SelectedIndexChanged(sender, e);
+        }
+
+        private void Form1_VisibleChanged(object sender, EventArgs e)
+        {
+            this._timer.Enabled = this.Visible;
         }
     }
 }
