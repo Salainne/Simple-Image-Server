@@ -94,10 +94,10 @@ jobs:
         shell: pwsh
   
       # 🛡️ Genskab .pfx certifikat fra Secret
-      - name: Recreate .pfx Certificate
-        run: |
-          echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
-        shell: bash
+      #- name: Recreate .pfx Certificate
+      #  run: |
+      #    echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
+      #  shell: bash
   
       # 🔏 Signér .exe og .dll i dist
       - name: Sign binaries
