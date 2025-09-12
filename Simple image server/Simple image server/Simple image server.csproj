@@ -36,6 +36,9 @@
     <ApplicationIcon>Assets\ChatGPT Image Apr 25, 2025, 07_05_28 PM.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp">
+      <Version>1.0.4</Version>
+    </PackageReference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using Simple_image_server.Model;
 using Simple_image_server.Properties;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -751,55 +753,195 @@ namespace Simple_image_server
         }
 
 
-        public static byte[] CropToSquare(byte[] imageBytes)
+        //public static byte[] CropToSquare(byte[] imageBytes)
+        //{
+        //    using (var inputStream = new MemoryStream(imageBytes))
+        //    using (var originalImage = Image.FromStream(inputStream))
+        //    {
+        //        int side = Math.Min(originalImage.Width, originalImage.Height);
+        //        int x = (originalImage.Width - side) / 2;
+        //        int y = (originalImage.Height - side) / 2;
+
+        //        using (var squareBitmap = new Bitmap(side, side))
+        //        using (var graphics = Graphics.FromImage(squareBitmap))
+        //        {
+        //            graphics.DrawImage(originalImage, new Rectangle(0, 0, side, side), new Rectangle(x, y, side, side), GraphicsUnit.Pixel);
+
+        //            using (var outputStream = new MemoryStream())
+        //            {
+        //                squareBitmap.Save(outputStream, ImageFormat.Png);
+        //                return outputStream.ToArray();
+        //            }
+        //        }
+        //    }
+        //}
+        //public static byte[] CropToSquare(byte[] imageBytes)
+        //{
+        //    if (imageBytes == null || imageBytes.Length == 0)
+        //        throw new ArgumentException("Tomt eller null billede.", nameof(imageBytes));
+
+        //    // 1) Valider & materialisér fuldt ud (undgå lazy decode/stream-binding)
+        //    using (var input = new MemoryStream(imageBytes, writable: false))
+        //    using (var srcTemp = Image.FromStream(
+        //               input,
+        //               useEmbeddedColorManagement: false,
+        //               validateImageData: true)) // tving validering af billeddata
+        //    using (var original = new Bitmap(srcTemp)) // løsriver fra stream
+        //    {
+        //        if (original.Width <= 0 || original.Height <= 0)
+        //            throw new ArgumentException("Ugyldige billed-dimensioner.");
+
+        //        // Hvis allerede kvadratisk, returnér original (intet spild)
+        //        if (original.Width == original.Height)
+        //            return imageBytes;
+
+        //        // 2) Beregn kvadratisk udsnit (centreret)
+        //        int side = Math.Min(original.Width, original.Height);
+        //        int x = (original.Width - side) / 2;
+        //        int y = (original.Height - side) / 2;
+
+        //        // Safety: clamp for en sikkerheds skyld
+        //        if (x < 0) x = 0;
+        //        if (y < 0) y = 0;
+        //        if (x + side > original.Width) side = original.Width - x;
+        //        if (y + side > original.Height) side = original.Height - y;
+
+        //        var srcRect = new Rectangle(x, y, side, side);
+        //        var destRect = new Rectangle(0, 0, side, side);
+
+        //        // 3) Tegn ind i en ny bitmap med stabilt pixel-format
+        //        using (var square = new Bitmap(side, side, PixelFormat.Format32bppPArgb))
+        //        using (var g = Graphics.FromImage(square))
+        //        {
+        //            g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+        //            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+        //            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+        //            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+        //            g.DrawImage(original, destRect, srcRect, GraphicsUnit.Pixel);
+
+        //            using (var output = new MemoryStream())
+        //            {
+        //                // Gem som PNG (robust og tabsfri)
+        //                square.Save(output, ImageFormat.Png);
+        //                return output.ToArray();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public static byte[] ResizeImage(byte[] imageBytes, int width)
+        //{
+        //    using (var inputStream = new MemoryStream(imageBytes))
+        //    using (var originalImage = Image.FromStream(inputStream))
+        //    {
+        //        if(originalImage.Width < width)
+        //        {
+        //            return imageBytes;
+        //        }
+
+        //        int height = (int)(originalImage.Height * ((float)width / originalImage.Width));
+
+        //        using (var resizedBitmap = new Bitmap(originalImage, new Size(width, height)))
+        //        using (var graphics = Graphics.FromImage(resizedBitmap))
+        //        {
+        //            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //            graphics.DrawImage(originalImage, 0, 0, width, height);
+
+        //            using (var outputStream = new MemoryStream())
+        //            {
+        //                resizedBitmap.Save(outputStream, ImageFormat.Png);
+        //                return outputStream.ToArray();
+        //            }
+        //        }
+        //    }
+        //}
+        //public static byte[] ResizeImage(byte[] imageBytes, int width)
+        //{
+        //    if (imageBytes == null || imageBytes.Length == 0)
+        //        throw new ArgumentException("Tomt billede.");
+
+        //    // Valider & materialisér fuldt ud
+        //    using (var input = new MemoryStream(imageBytes, writable: false))
+        //    using (var srcTemp = Image.FromStream(
+        //               input,
+        //               useEmbeddedColorManagement: false,
+        //               validateImageData: true)) // tving GDI+ til at validere
+        //    using (var original = new Bitmap(srcTemp)) // løsriver fra stream/lazy decode
+        //    {
+        //        if (original.Width <= width)
+        //            return imageBytes;
+
+        //        int height = (int)Math.Round(original.Height * (width / (double)original.Width));
+
+        //        // Brug et stabilt pixel-format
+        //        using (var resized = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb))
+        //        using (var g = Graphics.FromImage(resized))
+        //        {
+        //            g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+        //            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+        //            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+        //            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+        //            var dest = new Rectangle(0, 0, width, height);
+        //            g.DrawImage(original, dest, new Rectangle(0, 0, original.Width, original.Height), GraphicsUnit.Pixel);
+
+        //            using (var output = new MemoryStream())
+        //            {
+        //                // Gem som PNG (robust, lossless)
+        //                resized.Save(output, System.Drawing.Imaging.ImageFormat.Png);
+        //                return output.ToArray();
+        //            }
+        //        }
+        //    }
+        //}
+
+        public static byte[] CropToSquare(byte[] bytes)
         {
-            using (var inputStream = new MemoryStream(imageBytes))
-            using (var originalImage = Image.FromStream(inputStream))
+            if (bytes == null || bytes.Length == 0)
+                throw new ArgumentException("Tomt billede.", nameof(bytes));
+
+            using (var img = SixLabors.ImageSharp.Image.Load(bytes)) // validerer og loader fuldt
             {
-                int side = Math.Min(originalImage.Width, originalImage.Height);
-                int x = (originalImage.Width - side) / 2;
-                int y = (originalImage.Height - side) / 2;
+                // Find korteste side
+                int side = Math.Min(img.Width, img.Height);
 
-                using (var squareBitmap = new Bitmap(side, side))
-                using (var graphics = Graphics.FromImage(squareBitmap))
+                // Beregn startpunkt (centreret crop)
+                int x = (img.Width - side) / 2;
+                int y = (img.Height - side) / 2;
+
+                var rect = new SixLabors.ImageSharp.Rectangle(x, y, side, side);
+
+                // Mutér billedet: crop til kvadrat
+                img.Mutate(m => m.Crop(rect));
+
+                using (var ms = new MemoryStream())
                 {
-                    graphics.DrawImage(originalImage, new Rectangle(0, 0, side, side), new Rectangle(x, y, side, side), GraphicsUnit.Pixel);
-
-                    using (var outputStream = new MemoryStream())
-                    {
-                        squareBitmap.Save(outputStream, ImageFormat.Png);
-                        return outputStream.ToArray();
-                    }
+                    img.Save(ms, new PngEncoder()); // tabsfri
+                    return ms.ToArray();
                 }
             }
         }
 
-        public static byte[] ResizeImage(byte[] imageBytes, int width)
+        public static byte[] ResizeImage(byte[] bytes, int width)
         {
-            using (var inputStream = new MemoryStream(imageBytes))
-            using (var originalImage = Image.FromStream(inputStream))
+            using (var img = SixLabors.ImageSharp.Image.Load(bytes))
             {
-                if(originalImage.Width < width)
+                if (img.Width <= width) return bytes;
+                int height = (int)Math.Round(img.Height * (width / (double)img.Width));
+                img.Mutate(x => x.Resize(new SixLabors.ImageSharp.Processing.ResizeOptions
                 {
-                    return imageBytes;
-                }
-
-                int height = (int)(originalImage.Height * ((float)width / originalImage.Width));
-
-                using (var resizedBitmap = new Bitmap(originalImage, new Size(width, height)))
-                using (var graphics = Graphics.FromImage(resizedBitmap))
-                {
-                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    graphics.DrawImage(originalImage, 0, 0, width, height);
-
-                    using (var outputStream = new MemoryStream())
-                    {
-                        resizedBitmap.Save(outputStream, ImageFormat.Png);
-                        return outputStream.ToArray();
-                    }
-                }
+                    Mode = SixLabors.ImageSharp.Processing.ResizeMode.Max,
+                    Size = new SixLabors.ImageSharp.Size(width, height),
+                    Sampler = SixLabors.ImageSharp.Processing.KnownResamplers.Lanczos3
+                }));
+                using (var ms = new MemoryStream())
+                { img.Save(ms, new SixLabors.ImageSharp.Formats.Png.PngEncoder()); return ms.ToArray(); }
             }
         }
+
 
         private void Log(string message, LogLevel logLevel)
         {
