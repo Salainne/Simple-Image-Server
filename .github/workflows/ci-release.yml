@@ -94,19 +94,19 @@ jobs:
         shell: pwsh
   
       # 🛡️ Genskab .pfx certifikat fra Secret
-      - name: Recreate .pfx Certificate
-        run: |
-          echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
-        shell: bash
+      #- name: Recreate .pfx Certificate
+      #  run: |
+      #    echo "${{ secrets.SIGN_CERTIFICATE }}" | base64 -d > signing-cert.pfx
+      #  shell: bash
   
       # 🔏 Signér .exe og .dll i dist
-      - name: Sign binaries
-        run: |
-          $files = Get-ChildItem -Path dist -Recurse -Include *.exe, *.dll
-          foreach ($file in $files) {
-            & "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /f signing-cert.pfx /p "${{ secrets.SIGN_PASSWORD }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 "$($file.FullName)"
-          }
-        shell: pwsh
+      #- name: Sign binaries
+      #  run: |
+      #    $files = Get-ChildItem -Path dist -Recurse -Include *.exe, *.dll
+      #    foreach ($file in $files) {
+      #      & "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /f signing-cert.pfx /p "${{ secrets.SIGN_PASSWORD }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 "$($file.FullName)"
+      #    }
+      #  shell: pwsh
   
       # 🧾 Generér korrekt updates.json og placér i Autoupdater/
       - name: Generate updates.json
