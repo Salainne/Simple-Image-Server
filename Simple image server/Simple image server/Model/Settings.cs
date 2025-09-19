@@ -21,6 +21,8 @@ namespace Simple_image_server.Model
         public bool ShowUpdatenowDialogOnAppStart { get; set; }
         public bool RandomImageFromAllActiveListsWithName { get; set; }
         public LogLevel Loglevel { get; set; }
+        public int SslPort { get; set; }
+        public bool EnableSsl { get; set; }
 
         public Settings()
         {

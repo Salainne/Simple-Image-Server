@@ -49,7 +49,7 @@ namespace Simple_image_server
         {
             _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings.json");
 #if DEBUG
-            //_settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings-DEBUG.json");
+            _settingsPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SimpleImageServer", "settings-DEBUG.json");
 #endif
 
             InitializeComponent();
@@ -245,6 +245,9 @@ namespace Simple_image_server
             chkAutostart.Checked = _settings.Autostart;
             chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
 
+            txtSslport.Text = _settings.SslPort.ToString();
+            chkEnableSsl.Checked = _settings.EnableSsl;
+
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -321,6 +324,8 @@ namespace Simple_image_server
                 AllowRemoteAccess = false,
                 Port = 9191,
                 DarkMode = true,
+                SslPort = 9190,
+                EnableSsl = false
             };
         }
 
@@ -329,6 +334,10 @@ namespace Simple_image_server
             _settings.AllowRemoteAccess = chkAllowremoteAccess.Checked;
             _settings.Port = int.TryParse(txtPort.Text, out int port) ? port : 9191;
             _settings.Autostart = chkAutostart.Checked;
+
+            _settings.SslPort = int.TryParse(txtSslport.Text, out int sslPort) ? sslPort : 9192;
+            _settings.EnableSsl = chkEnableSsl.Checked;
+
             _settings.DarkMode = DarkMode.Checked;
             _settings.RandomImageFromAllActiveListsWithName = chkRandomImageFromAllActiveListsWithName.Checked;
 
@@ -378,9 +387,18 @@ namespace Simple_image_server
 
         private async void StartServer()
         {
+            // netsh http add sslcert ipport=127.0.0.1:9192 appid={E4B64AAA-C506-46B2-B216-35DB7EEB67AC} certhash=AA9616BA0FB4786E800B54589CFADA99E406F494
+            // netsh http delete sslcert ipport=0.0.0.0:9192
+
+            //netsh http delete sslcert hostnameport = localhost:9192
+            //netsh http add sslcert hostnameport=localhost:9192 appid={E4B64AAA-C506-46B2-B216-35DB7EEB67AC} certhash=43284A209CE983158AD09C088F19AAC0B766AFB9 certstorename=MY
             httpListener = new HttpListener();
             var prefix = chkAllowremoteAccess.Checked ? $"http://+:{txtPort.Text}/" : $"http://localhost:{txtPort.Text}/";
             httpListener.Prefixes.Add(prefix);
+            if (chkEnableSsl.Checked)
+            {
+                httpListener.Prefixes.Add($"https://localhost:{txtSslport.Text}/");
+            }
 
             try
             {

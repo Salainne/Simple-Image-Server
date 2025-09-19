@@ -187,6 +187,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Ssl:.
+        /// </summary>
+        internal static string chkEnableSsl {
+            get {
+                return ResourceManager.GetString("chkEnableSsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         internal static string chkListActive {
@@ -480,6 +489,15 @@ namespace Simple_image_server.Properties {
         internal static string label10 {
             get {
                 return ResourceManager.GetString("label10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port:.
+        /// </summary>
+        internal static string label11 {
+            get {
+                return ResourceManager.GetString("label11", resourceCulture);
             }
         }
         

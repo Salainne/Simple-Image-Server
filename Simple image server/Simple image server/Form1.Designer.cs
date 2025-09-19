@@ -34,6 +34,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.chkEnableSsl = new System.Windows.Forms.CheckBox();
+            this.txtSslport = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.cmbDebugLevel = new System.Windows.Forms.ComboBox();
             this.chkRandomImageFromAllActiveListsWithName = new System.Windows.Forms.CheckBox();
@@ -129,6 +132,9 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.chkEnableSsl);
+            this.groupBox1.Controls.Add(this.txtSslport);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.cmbDebugLevel);
             this.groupBox1.Controls.Add(this.chkRandomImageFromAllActiveListsWithName);
@@ -144,6 +150,22 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // label11
+            // 
+            resources.ApplyResources(this.label11, "label11");
+            this.label11.Name = "label11";
+            // 
+            // chkEnableSsl
+            // 
+            resources.ApplyResources(this.chkEnableSsl, "chkEnableSsl");
+            this.chkEnableSsl.Name = "chkEnableSsl";
+            this.chkEnableSsl.UseVisualStyleBackColor = true;
+            // 
+            // txtSslport
+            // 
+            resources.ApplyResources(this.txtSslport, "txtSslport");
+            this.txtSslport.Name = "txtSslport";
             // 
             // label10
             // 
@@ -686,6 +708,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lbLog;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox chkEnableSsl;
+        private System.Windows.Forms.TextBox txtSslport;
     }
 }
 
