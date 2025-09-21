@@ -243,11 +243,12 @@ namespace Simple_image_server
             chkAllowremoteAccess.Checked = _settings.AllowRemoteAccess;
             txtPort.Text = _settings.Port.ToString();
             chkAutostart.Checked = _settings.Autostart;
-            chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
-
+            
             txtSslport.Text = _settings.SslPort.ToString();
             chkEnableSsl.Checked = _settings.EnableSsl;
 
+            // skal være til sidst lige nu...
+            chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
         }
 
         private void Form1_Shown(object sender, EventArgs e)
