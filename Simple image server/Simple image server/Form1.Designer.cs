@@ -93,6 +93,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chkNsfw = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cmbCacheSize = new System.Windows.Forms.ComboBox();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -133,6 +135,8 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.cmbCacheSize);
             this.groupBox1.Controls.Add(this.chkNsfw);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.chkEnableSsl);
@@ -619,6 +623,24 @@
             this.chkNsfw.ThreeState = true;
             this.chkNsfw.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            resources.ApplyResources(this.label12, "label12");
+            this.label12.Name = "label12";
+            // 
+            // cmbCacheSize
+            // 
+            this.cmbCacheSize.FormattingEnabled = true;
+            this.cmbCacheSize.Items.AddRange(new object[] {
+            resources.GetString("cmbCacheSize.Items"),
+            resources.GetString("cmbCacheSize.Items1"),
+            resources.GetString("cmbCacheSize.Items2"),
+            resources.GetString("cmbCacheSize.Items3"),
+            resources.GetString("cmbCacheSize.Items4"),
+            resources.GetString("cmbCacheSize.Items5")});
+            resources.ApplyResources(this.cmbCacheSize, "cmbCacheSize");
+            this.cmbCacheSize.Name = "cmbCacheSize";
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -721,6 +743,8 @@
         private System.Windows.Forms.CheckBox chkEnableSsl;
         private System.Windows.Forms.TextBox txtSslport;
         private System.Windows.Forms.CheckBox chkNsfw;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox cmbCacheSize;
     }
 }
 

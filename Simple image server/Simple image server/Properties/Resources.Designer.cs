@@ -511,6 +511,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cache size:.
+        /// </summary>
+        internal static string label12 {
+            get {
+                return ResourceManager.GetString("label12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active timeperiod:.
         /// </summary>
         internal static string label2 {

@@ -26,6 +26,7 @@ namespace Simple_image_server.Model
         public bool EnableSsl { get; set; }
 
         public CheckState Nsfw { get; set; }
+        public long CacheSize { get; set; }
 
         public Settings()
         {
@@ -34,7 +35,8 @@ namespace Simple_image_server.Model
             RandomImageFromAllActiveListsWithName = true;
             Loglevel = LogLevel.Info;
             Nsfw = CheckState.Indeterminate;
-            
+            CacheSize = 512L * 1024 * 1024; // 512 MB
+
         }
     }
 }

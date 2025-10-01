@@ -4038,6 +4038,75 @@
   <data name="groupBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
+  <data name="label12.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label12.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label12.Location" type="System.Drawing.Point, System.Drawing">
+    <value>772, 90</value>
+  </data>
+  <data name="label12.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 20</value>
+  </data>
+  <data name="label12.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="label12.Text" xml:space="preserve">
+    <value>Cache size:</value>
+  </data>
+  <data name="&gt;&gt;label12.Name" xml:space="preserve">
+    <value>label12</value>
+  </data>
+  <data name="&gt;&gt;label12.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label12.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;label12.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cmbCacheSize.Items" xml:space="preserve">
+    <value>128</value>
+  </data>
+  <data name="cmbCacheSize.Items1" xml:space="preserve">
+    <value>256</value>
+  </data>
+  <data name="cmbCacheSize.Items2" xml:space="preserve">
+    <value>512</value>
+  </data>
+  <data name="cmbCacheSize.Items3" xml:space="preserve">
+    <value>1024</value>
+  </data>
+  <data name="cmbCacheSize.Items4" xml:space="preserve">
+    <value>2048</value>
+  </data>
+  <data name="cmbCacheSize.Items5" xml:space="preserve">
+    <value>4096</value>
+  </data>
+  <data name="cmbCacheSize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>874, 87</value>
+  </data>
+  <data name="cmbCacheSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 28</value>
+  </data>
+  <data name="cmbCacheSize.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;cmbCacheSize.Name" xml:space="preserve">
+    <value>cmbCacheSize</value>
+  </data>
+  <data name="&gt;&gt;cmbCacheSize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmbCacheSize.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;cmbCacheSize.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="chkNsfw.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -4066,7 +4135,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;chkNsfw.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="label11.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4096,7 +4165,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="chkEnableSsl.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4126,7 +4195,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;chkEnableSsl.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="txtSslport.Location" type="System.Drawing.Point, System.Drawing">
     <value>250, 55</value>
@@ -4147,7 +4216,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;txtSslport.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="label10.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4174,7 +4243,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="cmbDebugLevel.Items" xml:space="preserve">
     <value>Debug</value>
@@ -4207,7 +4276,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cmbDebugLevel.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="chkRandomImageFromAllActiveListsWithName.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4237,7 +4306,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;chkRandomImageFromAllActiveListsWithName.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="cmbLanguage.Items" xml:space="preserve">
     <value>English</value>
@@ -4264,7 +4333,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;cmbLanguage.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="btnOpenSettingsfolder.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4291,7 +4360,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;btnOpenSettingsfolder.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="btnSaveSettingsNow.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4318,7 +4387,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;btnSaveSettingsNow.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="DarkMode.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4348,7 +4417,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;DarkMode.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="btnStartOnBoot.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4375,7 +4444,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;btnStartOnBoot.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>13</value>
   </data>
   <data name="chkAutostart.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4402,7 +4471,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;chkAutostart.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>14</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4429,7 +4498,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>15</value>
   </data>
   <data name="chkAllowremoteAccess.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4456,7 +4525,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;chkAllowremoteAccess.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>16</value>
   </data>
   <data name="txtPort.Location" type="System.Drawing.Point, System.Drawing">
     <value>250, 23</value>
@@ -4477,7 +4546,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;txtPort.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>17</value>
   </data>
   <data name="btnServertoggle.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4504,7 +4573,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;btnServertoggle.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>18</value>
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 12</value>

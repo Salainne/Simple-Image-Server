@@ -348,4 +348,7 @@
   <data name="chkNsfw" xml:space="preserve">
     <value>NSFW</value>
   </data>
+  <data name="label12" xml:space="preserve">
+    <value>Cache size:</value>
+  </data>
 </root>

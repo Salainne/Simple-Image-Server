@@ -182,6 +182,7 @@ namespace Simple_image_server
         {
             // Get our settings...
             LoadSettings();
+
             cmbLanguage.SelectedIndexChanged += (s, ee) =>
             {
                 switch (cmbLanguage.SelectedItem.ToString())
@@ -221,6 +222,24 @@ namespace Simple_image_server
                     case "Error":
                         _settings.Loglevel = LogLevel.Error;
                         break;
+                }
+            };
+
+
+            foreach(string c in cmbCacheSize.Items)
+            {
+                if(int.Parse(c) * 1024*1024 == _settings.CacheSize)
+                {
+                    cmbCacheSize.SelectedItem = c;
+                }
+            }
+            _imageCache.SetMaxMemoryBytes(_settings.CacheSize);
+            cmbCacheSize.SelectedIndexChanged += (s, ee) =>
+            {
+                if (cmbCacheSize.SelectedItem != null)
+                {
+                    _settings.CacheSize = int.Parse((string)cmbCacheSize.SelectedItem) * 1024L * 1024; // in MB
+                    _imageCache.SetMaxMemoryBytes(_settings.CacheSize);
                 }
             };
 
@@ -329,7 +348,8 @@ namespace Simple_image_server
                 DarkMode = true,
                 SslPort = 9190,
                 EnableSsl = false,
-                Nsfw = CheckState.Indeterminate
+                Nsfw = CheckState.Indeterminate,
+                CacheSize = 512L * 1024*1024, // 512 MB
             };
         }
 
@@ -347,6 +367,11 @@ namespace Simple_image_server
 
             _settings.Nsfw = chkNsfw.CheckState;
 
+            if(cmbCacheSize.SelectedItem != null)
+            {
+                _settings.CacheSize = int.Parse((string)cmbCacheSize.SelectedItem) * 1024L * 1024; // in MB
+            }
+            
             if (!Directory.Exists(Path.GetDirectoryName(_settingsPath)))
             {
                 // we should probaly not create the directory unless the settings has been changed? hmm..
@@ -510,6 +535,8 @@ namespace Simple_image_server
                     }
                 }
                 response.Close();
+
+                Invoke(new Action(() => Log(_imageCache.ToString(), LogLevel.Debug)));
             }
             catch(HttpListenerException ex)
             {
