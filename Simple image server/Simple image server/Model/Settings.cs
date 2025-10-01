@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Simple_image_server.Model
 {
@@ -24,12 +25,16 @@ namespace Simple_image_server.Model
         public int SslPort { get; set; }
         public bool EnableSsl { get; set; }
 
+        public CheckState Nsfw { get; set; }
+
         public Settings()
         {
             Lists = new List<Model.Imagelist>();
             CultureInfoName = "en-US";
             RandomImageFromAllActiveListsWithName = true;
             Loglevel = LogLevel.Info;
+            Nsfw = CheckState.Indeterminate;
+            
         }
     }
 }

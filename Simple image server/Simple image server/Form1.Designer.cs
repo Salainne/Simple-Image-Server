@@ -92,6 +92,7 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.chkNsfw = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -132,6 +133,7 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.chkNsfw);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.chkEnableSsl);
             this.groupBox1.Controls.Add(this.txtSslport);
@@ -610,6 +612,13 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
             // 
+            // chkNsfw
+            // 
+            resources.ApplyResources(this.chkNsfw, "chkNsfw");
+            this.chkNsfw.Name = "chkNsfw";
+            this.chkNsfw.ThreeState = true;
+            this.chkNsfw.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -711,6 +720,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox chkEnableSsl;
         private System.Windows.Forms.TextBox txtSslport;
+        private System.Windows.Forms.CheckBox chkNsfw;
     }
 }
 

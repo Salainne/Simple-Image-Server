@@ -345,4 +345,7 @@
   <data name="chkEnableSsl" xml:space="preserve">
     <value>Enable Ssl:</value>
   </data>
+  <data name="chkNsfw" xml:space="preserve">
+    <value>NSFW</value>
+  </data>
 </root>

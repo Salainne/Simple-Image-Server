@@ -268,6 +268,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NSFW.
+        /// </summary>
+        internal static string chkNsfw {
+            get {
+                return ResourceManager.GetString("chkNsfw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deliver random image from list.
         /// </summary>
         internal static string chkRandomImage {

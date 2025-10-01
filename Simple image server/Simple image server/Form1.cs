@@ -247,6 +247,8 @@ namespace Simple_image_server
             txtSslport.Text = _settings.SslPort.ToString();
             chkEnableSsl.Checked = _settings.EnableSsl;
 
+            chkNsfw.CheckState = _settings.Nsfw;
+
             // skal være til sidst lige nu...
             chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
         }
@@ -326,7 +328,8 @@ namespace Simple_image_server
                 Port = 9191,
                 DarkMode = true,
                 SslPort = 9190,
-                EnableSsl = false
+                EnableSsl = false,
+                Nsfw = CheckState.Indeterminate
             };
         }
 
@@ -341,6 +344,8 @@ namespace Simple_image_server
 
             _settings.DarkMode = DarkMode.Checked;
             _settings.RandomImageFromAllActiveListsWithName = chkRandomImageFromAllActiveListsWithName.Checked;
+
+            _settings.Nsfw = chkNsfw.CheckState;
 
             if (!Directory.Exists(Path.GetDirectoryName(_settingsPath)))
             {
@@ -590,7 +595,7 @@ namespace Simple_image_server
                 _clientIds.Add(clientid, new Client
                 {
                     Id = clientid,
-                    LastServedImageId = 0,
+                    LastServedImageId = -1,
                     LastServedImageList = filePath
                 });
             }
@@ -601,7 +606,7 @@ namespace Simple_image_server
             // if requested list is not the same as the last one, reset the last served image
             if (client.LastServedImageList != filePath)
             {
-                client.LastServedImageId = 0;
+                client.LastServedImageId = -1;
                 client.LastServedImageList = filePath;
             }
 
@@ -613,6 +618,7 @@ namespace Simple_image_server
                 selectedImage = null;
                 return null;
             }
+            //_imageCache.Clear();
 
             if (list.Images.Count == 0)
             {
@@ -627,9 +633,11 @@ namespace Simple_image_server
                 list.Interval = interval;
             }
 
-            if (client.LastServedImageId == 0)
+            var lastServedImageIdResat = false;
+            if (client.LastServedImageId < 0)
             {
                 client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
+                lastServedImageIdResat = true;
             }
             
             // When changing from one active list to another you could end in a situation where the index gives you a index out of range exception.
@@ -676,7 +684,7 @@ namespace Simple_image_server
             {
                 client.LastNewImagetime = DateTime.Now;
                 
-                if (list.UseRandomImage)
+                if (list.UseRandomImage && !lastServedImageIdResat)
                 {
                     //client.LastServedImageId = _random.Next(0, list.Images.Count);
                     client.LastServedImageId = GetNonRepeatingRandomIndex(list.Images.Count, client);
@@ -749,6 +757,17 @@ namespace Simple_image_server
                 a.ActiveDays.HasFlag((OpenDays)(1 << (int)DateTime.Now.DayOfWeek)) &&
                 a.IsInActiveTime(DateTime.Now.Hour, DateTime.Now.Minute)
                 ).ToList();
+
+            // nsfw filtering
+            if (chkNsfw.CheckState == CheckState.Unchecked)
+            {
+                lists = lists.Where(a => a.Description.ToLower().Contains("nsfw") == false).ToList();
+            }
+            else if (chkNsfw.CheckState == CheckState.Checked)
+            {
+                lists = lists.Where(a => a.Description.ToLower().Contains("nsfw") == true).ToList();
+            }
+
 
             if (lists.Any() == false)
             {
