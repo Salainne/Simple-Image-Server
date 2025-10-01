@@ -28,19 +28,24 @@ namespace Simple_image_server.Model
             }
         }
 
-        public byte[] GetOrAdd(string filePath, bool cropToSquare, int width, Func<byte[]> valueFactory)
+        public byte[] GetOrAdd(string filePath, bool cropToSquare, int width, Func<byte[]> valueFactory, out bool cacheHit)
         {
             var key = new ImageCacheKey(filePath, cropToSquare, width);
 
             byte[] cachedBytes;
             if (_cache.TryGetValue(key, out cachedBytes))
             {
+                cacheHit = true;
                 return cachedBytes;
             }
 
+            cacheHit = false;
             var bytes = valueFactory();
 
-            if (bytes == null) return null;
+            if (bytes == null)
+            {
+                return null;
+            }
 
             if (_currentMemoryBytes + bytes.LongLength > _maxMemoryBytes)
             {

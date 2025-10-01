@@ -18,5 +18,6 @@ namespace Simple_image_server.Model
         public LogLevel LogLevel { get; internal set; }
         public DateTime Eventtime { get; internal set; }
         public string Client { get; internal set; }
+        public bool CacheHit { get; internal set; }
     }
 }

@@ -490,6 +490,7 @@ namespace Simple_image_server
                     string statusmessage = string.Empty;
                     int statuscode = 200;
                     ImageElement selectedImage = null;
+                    var cacheHit = false;
 
                     if (format == "json")
                     {
@@ -507,7 +508,7 @@ namespace Simple_image_server
                     }
                     else
                     {
-                        resultBytes = GetReponse(clientid, cropToSquare, width, interval, filePath, out statuscode, out statusmessage, out selectedImage);
+                        resultBytes = GetReponse(clientid, cropToSquare, width, interval, filePath, out statuscode, out statusmessage, out selectedImage, out cacheHit);
                         response.StatusCode = statuscode;
                     }
 
@@ -522,7 +523,8 @@ namespace Simple_image_server
                             Filepath = filePath,
                             StatusMessage = statusmessage,
                             LogLevel = LogLevel.Info,
-                            Client = clientid
+                            Client = clientid,
+                            CacheHit = cacheHit
                         }
                     )));
                     if (resultBytes != null)
@@ -630,7 +632,8 @@ namespace Simple_image_server
             string filePath, 
             out int statuscode, 
             out string statusmessage,
-            out ImageElement selectedImage)
+            out ImageElement selectedImage,
+            out bool cacheHit)
         {
             if (!_clientIds.ContainsKey(clientid))
             {
@@ -658,6 +661,7 @@ namespace Simple_image_server
                 statuscode = 404;
                 statusmessage = Resources.ListNotFound;
                 selectedImage = null;
+                cacheHit = false;
                 return null;
             }
             //_imageCache.Clear();
@@ -667,6 +671,7 @@ namespace Simple_image_server
                 statuscode = 200;
                 statusmessage = Resources.EmptyList;
                 selectedImage = null;
+                cacheHit = false;
                 return null;
             }
 
@@ -719,7 +724,7 @@ namespace Simple_image_server
                         data = ResizeImage(data, width > 0 ? width : list.MaxWidth);
 
                     return data;
-                });
+                }, out cacheHit);
             selectedImage = list.Images[client.LastServedImageId];
 
             if (client.LastNewImagetime.AddSeconds(list.Interval) < DateTime.Now)
@@ -1416,7 +1421,7 @@ namespace Simple_image_server
 
             if (log.SelectedImage != null)
             {
-                txt = $"{log.Eventtime} GET {log.Filepath}. " + (log.Statuscode == 200 ? "OK" : "ERROR");
+                txt = $"{log.Eventtime} GET {log.Filepath}. CacheHit: {log.CacheHit}";
                 if (log.Crop)
                 {
                     txt += " Cropped to square";
