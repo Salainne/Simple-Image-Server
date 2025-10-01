@@ -44,6 +44,9 @@ namespace Simple_image_server
         private DarkModeTheme _darkMode = null;
         private System.Windows.Forms.Timer _timer = null;
         private ImageCache _imageCache = new ImageCache(500L * 1024 * 1024); // 500 MB
+        
+        
+        private const int _maxLoglines = 300;
 
         public Form1()
         {
@@ -1028,7 +1031,7 @@ namespace Simple_image_server
                 Name = txt,
                 Tag = message
             });
-            if (lbLog.Items.Count > 30)
+            if (lbLog.Items.Count > _maxLoglines)
             {
                 lbLog.Items.RemoveAt(lbLog.Items.Count - 1);
             }
