@@ -325,6 +325,12 @@ namespace Simple_image_server
                     MessageBox.Show(Resources.NoNewVersionAvailable, Resources.Form1, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }, "UpdateNowButton") { Visible = true });
+
+
+            var memuse = new ToolStripLabel("");
+            memuse.Alignment = ToolStripItemAlignment.Right;
+            memuse.Tag = "MemoryUsageLabel";
+            statusStrip1.Items.Add(memuse);
         }
 
         private void LoadSettings()
@@ -539,7 +545,13 @@ namespace Simple_image_server
                 }
                 response.Close();
 
-                Invoke(new Action(() => Log(_imageCache.ToString(), LogLevel.Debug)));
+                //Invoke(new Action(() => Log(_imageCache.ToString(), LogLevel.Debug)));
+
+                Invoke(new Action(() =>
+                {
+                    var memuse = statusStrip1.Items.OfType<ToolStripLabel>().FirstOrDefault(a => a.Tag != null && a.Tag.ToString() == "MemoryUsageLabel");
+                    memuse.Text = _imageCache.ToString();
+                }));
             }
             catch(HttpListenerException ex)
             {
