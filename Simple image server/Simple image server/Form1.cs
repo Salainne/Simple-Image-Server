@@ -271,8 +271,16 @@ namespace Simple_image_server
 
             chkNsfw.CheckState = _settings.Nsfw;
 
+            UpdateCacheLocation(_settings.CacheLocation);
+
             // skal være til sidst lige nu...
             chkRandomImageFromAllActiveListsWithName.Checked = _settings.RandomImageFromAllActiveListsWithName;
+        }
+
+        private void UpdateCacheLocation(string location)
+        {
+            lblCacheLocation.Text = location;
+            _imageCache.SetCacheLocation(location);
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -358,7 +366,8 @@ namespace Simple_image_server
                 SslPort = 9190,
                 EnableSsl = false,
                 Nsfw = CheckState.Indeterminate,
-                CacheSize = 512L * 1024*1024, // 512 MB
+                CacheSize = 512L * 1024*1024, // 512 MB,
+                CacheLocation = string.Empty,
             };
         }
 
@@ -375,6 +384,8 @@ namespace Simple_image_server
             _settings.RandomImageFromAllActiveListsWithName = chkRandomImageFromAllActiveListsWithName.Checked;
 
             _settings.Nsfw = chkNsfw.CheckState;
+
+            _settings.CacheLocation = lblCacheLocation.Text;
 
             if(cmbCacheSize.SelectedItem != null)
             {
@@ -1754,6 +1765,19 @@ namespace Simple_image_server
         private void Form1_VisibleChanged(object sender, EventArgs e)
         {
             this._timer.Enabled = this.Visible;
+        }
+
+        private void btnSetCacheLocation_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    UpdateCacheLocation(fbd.SelectedPath);
+                }
+            }
         }
     }
 }

@@ -34,6 +34,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cmbCacheSize = new System.Windows.Forms.ComboBox();
+            this.chkNsfw = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.chkEnableSsl = new System.Windows.Forms.CheckBox();
             this.txtSslport = new System.Windows.Forms.TextBox();
@@ -92,9 +95,8 @@
             this.pbPreview = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.chkNsfw = new System.Windows.Forms.CheckBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.cmbCacheSize = new System.Windows.Forms.ComboBox();
+            this.btnSetCacheLocation = new System.Windows.Forms.Button();
+            this.lblCacheLocation = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -135,6 +137,8 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.lblCacheLocation);
+            this.groupBox1.Controls.Add(this.btnSetCacheLocation);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.cmbCacheSize);
             this.groupBox1.Controls.Add(this.chkNsfw);
@@ -156,6 +160,31 @@
             this.groupBox1.Controls.Add(this.btnServertoggle);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // label12
+            // 
+            resources.ApplyResources(this.label12, "label12");
+            this.label12.Name = "label12";
+            // 
+            // cmbCacheSize
+            // 
+            this.cmbCacheSize.FormattingEnabled = true;
+            this.cmbCacheSize.Items.AddRange(new object[] {
+            resources.GetString("cmbCacheSize.Items"),
+            resources.GetString("cmbCacheSize.Items1"),
+            resources.GetString("cmbCacheSize.Items2"),
+            resources.GetString("cmbCacheSize.Items3"),
+            resources.GetString("cmbCacheSize.Items4"),
+            resources.GetString("cmbCacheSize.Items5")});
+            resources.ApplyResources(this.cmbCacheSize, "cmbCacheSize");
+            this.cmbCacheSize.Name = "cmbCacheSize";
+            // 
+            // chkNsfw
+            // 
+            resources.ApplyResources(this.chkNsfw, "chkNsfw");
+            this.chkNsfw.Name = "chkNsfw";
+            this.chkNsfw.ThreeState = true;
+            this.chkNsfw.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
@@ -616,30 +645,17 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
             // 
-            // chkNsfw
+            // btnSetCacheLocation
             // 
-            resources.ApplyResources(this.chkNsfw, "chkNsfw");
-            this.chkNsfw.Name = "chkNsfw";
-            this.chkNsfw.ThreeState = true;
-            this.chkNsfw.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.btnSetCacheLocation, "btnSetCacheLocation");
+            this.btnSetCacheLocation.Name = "btnSetCacheLocation";
+            this.btnSetCacheLocation.UseVisualStyleBackColor = true;
+            this.btnSetCacheLocation.Click += new System.EventHandler(this.btnSetCacheLocation_Click);
             // 
-            // label12
+            // lblCacheLocation
             // 
-            resources.ApplyResources(this.label12, "label12");
-            this.label12.Name = "label12";
-            // 
-            // cmbCacheSize
-            // 
-            this.cmbCacheSize.FormattingEnabled = true;
-            this.cmbCacheSize.Items.AddRange(new object[] {
-            resources.GetString("cmbCacheSize.Items"),
-            resources.GetString("cmbCacheSize.Items1"),
-            resources.GetString("cmbCacheSize.Items2"),
-            resources.GetString("cmbCacheSize.Items3"),
-            resources.GetString("cmbCacheSize.Items4"),
-            resources.GetString("cmbCacheSize.Items5")});
-            resources.ApplyResources(this.cmbCacheSize, "cmbCacheSize");
-            this.cmbCacheSize.Name = "cmbCacheSize";
+            resources.ApplyResources(this.lblCacheLocation, "lblCacheLocation");
+            this.lblCacheLocation.Name = "lblCacheLocation";
             // 
             // Form1
             // 
@@ -745,6 +761,8 @@
         private System.Windows.Forms.CheckBox chkNsfw;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox cmbCacheSize;
+        private System.Windows.Forms.Label lblCacheLocation;
+        private System.Windows.Forms.Button btnSetCacheLocation;
     }
 }
 

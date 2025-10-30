@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,27 @@ namespace Simple_image_server.Model
         private readonly Dictionary<ImageCacheKey, byte[]> _cache = new Dictionary<ImageCacheKey, byte[]>();
         private long _maxMemoryBytes;
         private long _currentMemoryBytes;
+        private string _cacheLocation;
 
         public ImageCache(long maxMemoryBytes = 500L * 1024 * 1024) // 500 MB
         {
             _maxMemoryBytes = maxMemoryBytes;
+        }
+
+        public void SetCacheLocation(string location)
+        {
+            if(string.IsNullOrEmpty(location) || !Directory.Exists(location))
+            {
+                _cacheLocation = null;
+                return;
+            }
+            
+            var path = Path.Combine(location, "imagecache");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            _cacheLocation = path;
         }
 
         public void SetMaxMemoryBytes(long maxMemoryBytes)
@@ -94,5 +112,7 @@ namespace Simple_image_server.Model
 
             return $"{len:0.##} {størrelser[orden]}";
         }
+
+        
     }
 }

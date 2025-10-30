@@ -151,6 +151,15 @@ namespace Simple_image_server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set cache location.
+        /// </summary>
+        internal static string btnSetCacheLocation {
+            get {
+                return ResourceManager.GetString("btnSetCacheLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable autostart on boot.
         /// </summary>
         internal static string btnStartOnBoot {
@@ -588,6 +597,15 @@ namespace Simple_image_server.Properties {
         internal static string label9 {
             get {
                 return ResourceManager.GetString("label9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string lblCacheLocation {
+            get {
+                return ResourceManager.GetString("lblCacheLocation", resourceCulture);
             }
         }
         

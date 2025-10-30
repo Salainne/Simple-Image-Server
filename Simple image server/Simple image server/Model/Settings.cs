@@ -27,6 +27,7 @@ namespace Simple_image_server.Model
 
         public CheckState Nsfw { get; set; }
         public long CacheSize { get; set; }
+        public string CacheLocation { get; internal set; }
 
         public Settings()
         {
