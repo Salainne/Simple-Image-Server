@@ -510,7 +510,7 @@ namespace Simple_image_server
                         response.StatusCode = statuscode;
                         statusmessage = $"OK json index";
                     }
-                    else if (format == "htmltemplate01" || format == "htmltemplate02")
+                    else if (format.StartsWith("htmltemplate"))
                     {
                         resultBytes = GetHtmlTemplateResponse(format, clientid, cropToSquare, width, request.Url);
                         response.ContentType = "text/html";
