@@ -62,6 +62,7 @@
         let interval = [INTERVAL];
         document.imageloadTimer = null;
         interval = 60000; // Override interval to 60 seconds
+        interval = interval * 10; // 10 minutes
 
         function loadNewImage() {
             const timestamp = new Date().getTime();
